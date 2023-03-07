@@ -98,6 +98,7 @@ const registerCtrl =
             description: description,
             experienceYears: experienceYears,
             profilePicture: profilePicture,
+            state: "En attente",
             role: "guide"
         });
 
