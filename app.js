@@ -1,17 +1,10 @@
-const express = require('express');
-const logger = require('morgan');
-const mwCORS = require('./middlewares/corsMw');
-const loginRoute = require("./routes/loginRoute");
-const registerRoute = require("./routes/registerRoute");
+const mongoose = require ("mongoose");
 
-require(".//dbConnect/connect");
+const adminSchema = new mongoose.Schema(
+    {
+        mailAdress: {type: String, unique: true, required: true},
+        password: {type: String, required: true, select: false}
+    }
+)
 
-const app = express();
-app.use(logger('dev'));
-app.use(express.json());
-
-app.use(mwCORS);
-app.use("/login", loginRoute);
-app.use("/register", registerRoute);
-
-module.exports = app;
+module.exports = mongoose.model("admins", adminSchema);
