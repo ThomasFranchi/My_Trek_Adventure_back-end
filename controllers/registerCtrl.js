@@ -65,13 +65,12 @@ const registerCtrl =
     {
         const {firstName, lastName, mail, password, description, experienceYears, profilePicture} = req.body;
 
-        if (typeof(firstName) !== "string" || typeof(lastName) !== "string" || typeof(mail) !== "string" || typeof(password) !== "string" || typeof(description) !== "string" || typeof(experienceYears) !== "number")
+        if (typeof(firstName) !== "string" || typeof(lastName) !== "string" || typeof(mail) !== "string" || typeof(password) !== "string" || typeof(description) !== "string")
         {
             return res.status(422).json({message: "Un ou plusieurs champs ne sont pas du bon type"})
         }
-        if (firstName === "" || lastName === "" || mail === "" || password === "" || description === "" || experienceYears === "")
+        if (firstName === "" || lastName === "" || mail === "" || password === "" || description === "")
         {
-            console.log(firstName + " " + lastName + " " + mail + " " + password + " " + description + " " + experienceYears)
             return res.status(422).json({message: "Un ou plusieurs champs sont vides"})
         }
         if (!mailRegExp.test(mail) || !passwordRegExp.test(password))
