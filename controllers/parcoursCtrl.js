@@ -125,6 +125,5 @@ const parcoursCtrl = {
         }
         return res.json(parcours);
     }
-}
 };
 module.exports = parcoursCtrl;
