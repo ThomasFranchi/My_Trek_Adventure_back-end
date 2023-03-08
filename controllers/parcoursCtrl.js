@@ -110,7 +110,21 @@ const parcoursCtrl = {
   },
   async updateStep(req, res) {},
   async deleteStep(req, res) {
-    const { stepName } = req.body;
-  },
+    const {stepName} = req.body;
+    },
+    async getSingleParcours(req, res)
+    {
+        console.log("getSingleParcours");
+        const {slug} = req.body;
+        console.log("Slug " + slug);
+        const parcours = await parcoursModel.findOne ({slug: slug}).exec();
+        console.log(parcours);
+        if (!parcours)
+        {
+            return res.status(422).json({message:"L'opération n'a pas pu être effectuée"});
+        }
+        return res.json(parcours);
+    }
+}
 };
 module.exports = parcoursCtrl;
