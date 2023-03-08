@@ -125,6 +125,35 @@ const loginCtrl =
         // Generate json web token
         const token = jwt.sign( {userId: user._id}, secretKey, { expiresIn: "24h" });
         return res.status(200).json({success:true, message: "Connexion réussie", token: token, user: {mail: user.mail, role: user.role}});
+    },
+    async getCurrentUser(req, res)
+    {
+        const id = req.user;
+
+        const admin = adminModel.findOne( {_id: id});
+        const guide = guideModel.findOne( {_id: id});
+        const user = userModel.findOne( {_id: id});
+
+        if (admin || guide || user)
+        {
+            if (admin)
+            {
+                let user = admin;
+                req.user = user;
+            } 
+            if (guide)
+            {
+                let user = guide;
+                req.user = user;
+            } 
+            if (user)
+            {
+                let user = admin;
+                req.user = user;
+            } 
+        }
+
+        console.log (currentUser);
     }
 }
 module.exports = loginCtrl;
