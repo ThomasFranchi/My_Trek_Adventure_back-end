@@ -12,6 +12,6 @@ router.put("/addstep", parcoursCtrl.createStep);
 router.put("/updatestep", parcoursCtrl.updateStep);
 router.delete("/deletestep", parcoursCtrl.deleteStep);
 
-router.post("/single-parcours", parcoursCtrl.getSingleParcours);
+router.get("/:slug", parcoursCtrl.getSingleParcours);
 
 module.exports = router;
