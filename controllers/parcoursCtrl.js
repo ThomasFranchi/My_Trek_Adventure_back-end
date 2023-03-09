@@ -5,11 +5,13 @@ const parcoursCtrl = {
   // Get all parcours in database
   async getParcoursList(req, res) {
     const list = await parcoursModel.find({});
+    console.log (list);
     if (!list) {
       return res
         .status(500)
         .json({ message: "Une erreur inattendue s'est produite" });
     }
+    return res.json(list);
   },
   
   // Create a parcours in the database
@@ -154,7 +156,7 @@ const parcoursCtrl = {
     console.log(parcoursStep);
 
     // Update the step (TO-DO)
-    
+
     return res.status(200).json({ message: "Etape mise à jour" });
   },
 

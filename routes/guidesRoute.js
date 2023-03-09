@@ -7,6 +7,6 @@ router.get("/", guideCtrl.getGuidesList);
 router.put("/update", guideCtrl.updateGuide);
 router.delete("/delete", guideCtrl.deleteGuide);
 
-router.post("/single-parcours", guideCtrl.getSingleGuide);
+router.get("/:slug", guideCtrl.getSingleGuide);
 
 module.exports = router;
