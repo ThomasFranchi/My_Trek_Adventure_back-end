@@ -24,9 +24,7 @@ const guidesCtrl = {
     return res.status(200).json({ message: "Guide supprimé" });
   },
   async getSingleGuide(req, res) {
-    console.log("getSingleGuide");
-    const { slug } = req.body;
-    console.log("Slug " + slug);
+    const slug = req.params.slug;
     const guide = await guidesModel.findOne({ slug: slug }).exec();
     console.log(guide);
     if (!guide) {
@@ -35,6 +33,6 @@ const guidesCtrl = {
         .json({ message: "L'opération n'a pas pu être effectuée" });
     }
     return res.json(guide);
-  },
+  }
 };
 module.exports = guidesCtrl;

@@ -11,6 +11,7 @@ const guidesSchema = new mongoose.Schema(
         profilePicture: {type: String, required: true},
         state: {type: String, required: true},
         role: {type:String, required: true},
+        slug: String
     }
 )
 
