@@ -12,6 +12,7 @@ const treksSchema = new mongoose.Schema(
             userID: {type: mongoose.Schema.Types.ObjectId, required: true},
             bookingDate: {type: Date, required: true},
             state: {type: String, required: true}
+
         }]
     }
 )
