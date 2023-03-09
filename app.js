@@ -5,6 +5,7 @@ const loginRoute = require("./routes/loginRoute");
 const registerRoute = require("./routes/registerRoute");
 const parcoursRoute = require("./routes/parcoursRoute");
 const treksRoute = require("./routes/treksRoute");
+const guidesRoute = require("./routes/guidesRoute");
 
 require(".//dbConnect/connect");
 
@@ -17,5 +18,6 @@ app.use("/login", loginRoute);
 app.use("/register", registerRoute);
 app.use("/parcours", parcoursRoute);
 app.use("/treks", treksRoute);
+app.use("/guides", guidesRoute);
 
 module.exports = app;

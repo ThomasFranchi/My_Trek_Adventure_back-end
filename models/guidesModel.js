@@ -10,7 +10,7 @@ const guidesSchema = new mongoose.Schema(
         experienceYears: {type: Number, required: true},
         profilePicture: {type: String, required: true},
         state: {type: String, required: true},
-        role: {type:String, required: true}
+        role: {type:String, required: true},
     }
 )
 
