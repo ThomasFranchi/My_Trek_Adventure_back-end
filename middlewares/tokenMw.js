@@ -1,4 +1,3 @@
-require('dotenv').config();
 const jwt = require("jsonwebtoken");
 
 const adminModel = require ("../models/adminsModel");
@@ -8,7 +7,7 @@ const userModel = require ("../models/usersModel");
 async function token (req, res, next) 
 {
     const token = String(req.get("Authorization")).split(" ")[1];
-
+    
     //Verifing if token is valid
     if (!token)
     {
@@ -17,12 +16,19 @@ async function token (req, res, next)
 
     try
     {
+        let currentUser;
         const decodedToken = jwt.verify(token, process.env.SECRET_KEY);
+
         console.log(decodedToken);
+
+        // if token is not valid
+        if(!decodedToken) {
+            return res.status(401).json({message:"Token invalide"});
+        }
 
         //if valid, get acess to user id
         const userId = decodedToken.userId;
-        console.log("userId " + userId);
+
         //Getting the user id
         const admin = await adminModel.findById(userId);
         const guide = await guideModel.findById(userId);
@@ -36,19 +42,20 @@ async function token (req, res, next)
         {
             if (admin)
             {
-                let user = admin;
-                return res.json({user});
+                currentUser = admin;                
             } 
             if (guide)
             {
-                let user = guide;
-                return res.json({user});
+                currentUser = guide;
             } 
             if (user)
             {
-                return res.json({user});
+                currentUser = user;
             } 
         }
+        console.log(currentUser);
+        req.user = currentUser;
+        console.log(req.user);
         next();
     }
     catch(error)

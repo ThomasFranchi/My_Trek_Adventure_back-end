@@ -43,6 +43,8 @@ const parcoursCtrl = {
     let parcoursSlug = name.toLowerCase();
     parcoursSlug = parcoursSlug.replace(" ", "-");
 
+    let imgPath = "/uploads/"+req.file.filename;
+
     // Save new parcours to the parcours database
     let newParcours = new parcoursModel({
       name: name,
@@ -50,7 +52,7 @@ const parcoursCtrl = {
       description: description,
       price: price,
       slug: parcoursSlug,
-      picture: picture,
+      parcoursPicture: imgPath,
       difficulty: difficulty,
     });
 
@@ -69,39 +71,39 @@ const parcoursCtrl = {
 
   // Update a parcours according to the new informations
   async updateParcours(req, res) {
-    const { slug, name, duration, description, price, picture, difficulty } =
-    req.body;
+    const body = req.body;
 
-    const parcours = await parcoursModel.findOne ({slug: slug}).exec();
+    
+
+    const parcours = await parcoursModel.findOne({slug: body.slug}).exec();
     console.log (parcours);
     if (!parcours)
     {
         return res.status(422).json({message:"L'opération n'a pas pu être effectuée"});
     }
+
     // Update the slug pertaining to the new name
-    let newSlug = name.toLowerCase();
-    newSlug = newSlug.replaceAll(" ", "-");
+    if(body.name) {
+      parcours.name = body.name;
+      parcours.slug = body.name.toLowerCase().replaceAll(" ", "-")
+    }
+
+    parcours.duration = body.duration ?? parcours.duration;
+    parcours.description = body.description ?? parcours.description;
+    parcours.price = body.price ?? parcours.price;
+    parcours.picture = body.picture ?? parcours.picture;
+    parcours.difficulty = body.difficulty ?? parcours.difficulty;
 
     // Update the parcours
-    const newParcours = await parcoursModel.updateOne({slug: slug},
-    {$set: 
-        {
-          name: name, 
-          duration: duration,
-          description: description,
-          price:price,
-          picture: picture,
-          difficulty: difficulty,
-          slug: newSlug
-        }}, {new: true});
-    
-        if (!newParcours) {
-          return res
-            .status(500)
-            .json({ message: "Une erreur inattendue s'est produite" });
-        }
-        console.log(newParcours);
-    return res.status(200).json({ message: "Parcours modifié" });
+
+    try {
+      await parcours.save();
+      return res.status(200).json({ message: "Parcours modifié" });
+    } catch(e) {
+      return res
+      .status(500)
+      .json({ message: "Une erreur inattendue s'est produite" });
+    }
   },
 
   // Delete a parcours
@@ -119,11 +121,13 @@ const parcoursCtrl = {
 
   // Create a step in the parcours
   async createStep(req, res) {
-    const { slug, stepName, stepLatitude, stepLongitude, stepPicture, stepDescription } = req.body;
+    const { slug, stepName, stepLatitude, stepLongitude, stepDescription } = req.body;
 
     // Update the slug pertaining to the new name
     let stepSlug = stepName.toLowerCase();
     stepSlug = stepSlug.replaceAll(" ", "-");
+
+    let imgPath = "/uploads/"+req.file.filename;
 
     // Update the slug pertaining to the new name
     const newStep = await parcoursModel.updateOne({slug: slug},
@@ -132,7 +136,7 @@ const parcoursCtrl = {
         stepName: stepName, 
         stepLatitude: stepLatitude,
         stepLongitude: stepLongitude,
-        stepPicture: stepPicture,
+        stepPicture: imgPath,
         stepDescription: stepDescription,
         stepSlug: stepSlug
       }}}, {new: true, upsert:true});
@@ -186,6 +190,18 @@ const parcoursCtrl = {
   {
     const slug = req.params.slug;
     const parcours = await parcoursModel.findOne ({slug: slug}).exec();
+    if (!parcours)
+    {
+        return res.status(422).json({message:"L'opération n'a pas pu être effectuée"});
+    }
+    return res.json(parcours);
+  },
+  async getSingleParcoursById(req, res)
+  {
+    const id = req.params.id;
+    console.log("id");
+    console.log(id);
+    const parcours = await parcoursModel.findOne ({_id: id}).exec();
     if (!parcours)
     {
         return res.status(422).json({message:"L'opération n'a pas pu être effectuée"});

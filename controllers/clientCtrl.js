@@ -17,9 +17,7 @@ const clientsCtrl = {
   updateClient(req, res) {},
   async deleteClient(req, res) 
   {
-    console.log("DeleteClient");
     const {slug} = req.body;
-    console.log("Slug");
     console.log(slug);
     const client = await usersModel.deleteOne({ slug: slug });
     if (!client) 

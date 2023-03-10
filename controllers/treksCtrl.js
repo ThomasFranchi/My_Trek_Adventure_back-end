@@ -1,5 +1,6 @@
 const treksModel = require("../models/treksModel");
 const parcoursModel = require ("../models/parcoursModel");
+const guidesModel = require ("../models/guidesModel");
 
 const treksCtrl = {
   async getTreksList(req, res) {
@@ -12,27 +13,36 @@ const treksCtrl = {
     console.log(list);
     return res.json(list);
   },
-  createTrek(req, res) {
+  async createTrek(req, res) {
     const {
       beginDate,
       endDate,
-      /*parcoursID,
-       *guideID,*/
+      parcours,
+      guide,
       minPlaces,
       maxPlaces,
     } = req.body;
 
-    // recuperer le nom du parcours ?
-    //let treksSlug = ?.toLowerCase();
-    //treksSlug = treksSLug.replace(" ", "-");
+    const parcoursId = await parcoursModel.findOne ({slug: parcours} ).exec();
+    if (!parcoursId)
+    {
+        return res.status(422).json({message:"L'opération n'a pas pu être effectuée"});
+    }
+
+    const guideId = await guidesModel.findOne({ slug: guide }).exec();
+    if (!guideId) {
+      return res
+        .status(422)
+        .json({ message: "L'opération n'a pas pu être effectuée" });
+    }
 
     let newTreks = new treksModel({
       beginDate: beginDate,
       endDate: endDate,
       minPlaces: minPlaces,
       maxPlaces: maxPlaces,
-      trekID: "TEST01",
-      guideID: "GUIDE01",
+      parcoursID: parcoursId._id,
+      guideID: guideId._id,
     });
 
     newTreks.save().then(()=>
