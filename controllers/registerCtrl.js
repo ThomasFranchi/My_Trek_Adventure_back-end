@@ -1,3 +1,5 @@
+
+
 const bcrypt = require('bcrypt');
 const adminModel = require ("../models/adminsModel");
 const guideModel = require ("../models/guidesModel");
@@ -5,13 +7,6 @@ const userModel = require ("../models/usersModel");
 
 const mailRegExp = new RegExp("^[a-zA-Z0-9_!#$%&amp;'*+/=?`{|}~^-]+(?:\\.[a-zA-Z0-9_!#$%&amp;'*+/=?`{|}~^-]+)*@[a-zA-Z0-9-]+(?:\\.[a-zA-Z0-9-]+)*$");
 const passwordRegExp = new RegExp("^(.*[a-zA-Z0-9!@#$%^&*])$");
-
-const secretKey = require ("../config/configSecretKey");
-
-const dateFormatting = Intl.DateTimeFormat("fr-FR", {
-    dateStyle: "short",
-    timeStyle: "long"
-  });
 
 const registerCtrl = 
 {
@@ -42,13 +37,16 @@ const registerCtrl =
             }
             return hash;
         })
-
+        let adminSlug = mail.toLowerCase();
+        adminSlug = adminSlug.replaceAll("@", "");
+        adminSlug = adminSlug.replaceAll(".", "");
         // Save admin to the admins database
         let newAdmin = new adminModel(
         {
             mail:mail,
             password: hashedPwd,
-            role: "admin"
+            role: "admin",
+            slug: adminSlug
         });
         
         newAdmin.save().then(()=>
@@ -88,6 +86,9 @@ const registerCtrl =
             return hash;
         })
 
+        let guideSlug = firstName + lastName;
+        guideSlug = guideSlug.toLowerCase();
+
         // Save guide to the guides database
         let newGuide = new guideModel(
         {
@@ -99,7 +100,8 @@ const registerCtrl =
             experienceYears: experienceYears,
             profilePicture: profilePicture,
             state: "En attente",
-            role: "guide"
+            role: "guide",
+            slug: guideSlug
         });
 
         newGuide.save().then(()=>
@@ -138,6 +140,9 @@ const registerCtrl =
             return hash;
         })
 
+        let userSlug = firstName + lastName;
+        userSlug = userSlug.toLowerCase();
+
         // Save guide to the guides database
         let newUser = new userModel(
         {
@@ -146,7 +151,8 @@ const registerCtrl =
             mail: mail, 
             password: hashedPwd,
             profilePicture: profilePicture,
-            role: "user"
+            role: "user",
+            slug: userSlug
         });
 
         newUser.save().then(()=>
