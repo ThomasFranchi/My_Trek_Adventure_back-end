@@ -1,7 +1,6 @@
 const express = require('express');
 const router = express.Router();
 const parcoursCtrl = require("../controllers/parcoursCtrl");
-const mwToken = require('../middlewares/tokenMw');
 
 router.get("/", parcoursCtrl.getParcoursList);
 router.post("/add", parcoursCtrl.createParcours);

@@ -1,3 +1,5 @@
+require('dotenv').config();
+
 const bcrypt = require('bcrypt');
 const jwt = require("jsonwebtoken");
 const adminModel = require ("../models/adminsModel");
@@ -6,13 +8,6 @@ const userModel = require ("../models/usersModel");
 
 const mailRegExp = new RegExp("^[a-zA-Z0-9_!#$%&amp;'*+/=?`{|}~^-]+(?:\\.[a-zA-Z0-9_!#$%&amp;'*+/=?`{|}~^-]+)*@[a-zA-Z0-9-]+(?:\\.[a-zA-Z0-9-]+)*$");
 const passwordRegExp = new RegExp("^(.*[a-zA-Z0-9!@#$%^&*])$");
-
-const secretKey = require ("../config/configSecretKey");
-
-const dateFormatting = Intl.DateTimeFormat("fr-FR", {
-    dateStyle: "short",
-    timeStyle: "long"
-  });
 
 const loginCtrl = 
 {
@@ -51,7 +46,7 @@ const loginCtrl =
         }
 
         // Generate json web token
-        const token = jwt.sign( {userId: admin._id}, secretKey, { expiresIn: "24h" });
+        const token = jwt.sign( {userId: admin._id}, process.env.SECRET_KEY, { expiresIn: "24h" });
         return res.status(200).json({success:true, message: "Connexion réussie", token: token, user: {mail: admin.mail, role: admin.role}});
     },
     async loginGuide (req, res)
@@ -87,7 +82,7 @@ const loginCtrl =
         }
 
         // Generate json web token
-        const token = jwt.sign( {userId: guide._id}, secretKey, { expiresIn: "24h" });
+        const token = jwt.sign( {userId: guide._id}, process.env.SECRET_KEY, { expiresIn: "24h" });
         return res.status(200).json({success:true, message: "Connexion réussie", token: token, user: {mail: guide.mail, role: guide.role}});
     },
     async loginUser (req, res)
@@ -123,7 +118,7 @@ const loginCtrl =
         }
 
         // Generate json web token
-        const token = jwt.sign( {userId: user._id}, secretKey, { expiresIn: "24h" });
+        const token = jwt.sign( {userId: user._id}, process.env.SECRET_KEY, { expiresIn: "24h" });
         return res.status(200).json({success:true, message: "Connexion réussie", token: token, user: {mail: user.mail, role: user.role}});
     },
     async getCurrentUser(req, res)
@@ -152,8 +147,7 @@ const loginCtrl =
                 req.user = user;
             } 
         }
-
-        console.log (currentUser);
+        return(res.json(req.user));
     }
 }
 module.exports = loginCtrl;

@@ -1,5 +1,5 @@
+require('dotenv').config();
 const jwt = require("jsonwebtoken");
-const secretKey = require ("../config/configSecretKey");
 
 const adminModel = require ("../models/adminsModel");
 const guideModel = require ("../models/guidesModel");
@@ -17,7 +17,7 @@ async function token (req, res, next)
 
     try
     {
-        const decodedToken = jwt.verify(token, secretKey);
+        const decodedToken = jwt.verify(token, process.env.SECRET_KEY);
         console.log(decodedToken);
 
         //if valid, get acess to user id
@@ -30,12 +30,10 @@ async function token (req, res, next)
         // Verification du user
         if (!admin && !guide && !user)
         {
-            console.log("Pas d'utilisateur trouvé");
             throw new Error ("Aucun utilisateur trouvé");
         }
         if (admin || guide || user)
         {
-            console.log("personne trouvée");
             if (admin)
             {
                 let user = admin;
