@@ -8,6 +8,7 @@ const treksSchema = new mongoose.Schema(
         guideID: {type: mongoose.Schema.Types.ObjectId, required: true},
         minPlaces: {type: Number, required: true},
         maxPlaces: {type: Number, required: true},
+        slug: String,
         bookings: [{
             userID: {type: mongoose.Schema.Types.ObjectId, required: true},
             bookingDate: {type: Date, required: true},

@@ -9,20 +9,22 @@ const parcoursRoute = require("./routes/parcoursRoute");
 const treksRoute = require("./routes/treksRoute");
 const guidesRoute = require("./routes/guidesRoute");
 const clientsRoute = require("./routes/clientsRoute");
+const path = require("path");
 
 require(".//dbConnect/connect");
 
 const app = express();
 app.use(logger('dev'));
 app.use(express.json());
+app.use("/uploads", express.static(path.join(__dirname, "/uploads")));
 
 app.use("/register", registerRoute);
 app.use(mwCORS);
 app.use("/login", loginRoute);
 
-app.use("/parcours", mwToken, parcoursRoute);
-app.use("/treks", mwToken, treksRoute);
-app.use("/guides", mwToken, guidesRoute);
-app.use("/clients", mwToken,clientsRoute);
+app.use("/parcours", parcoursRoute);
+app.use("/treks", treksRoute);
+app.use("/guides",  guidesRoute);
+app.use("/clients", clientsRoute);
 
 module.exports = app;

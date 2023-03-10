@@ -33,6 +33,17 @@ const guidesCtrl = {
         .json({ message: "L'opération n'a pas pu être effectuée" });
     }
     return res.json(guide);
+  },
+  async getSingleGuideById(req, res) {
+    const slug = req.params.id;
+    const guide = await guidesModel.findOne({ _id: id }).exec();
+    console.log(guide);
+    if (!guide) {
+      return res
+        .status(422)
+        .json({ message: "L'opération n'a pas pu être effectuée" });
+    }
+    return res.json(guide);
   }
 };
 module.exports = guidesCtrl;

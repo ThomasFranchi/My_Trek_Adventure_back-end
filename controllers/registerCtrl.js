@@ -4,6 +4,7 @@ const bcrypt = require('bcrypt');
 const adminModel = require ("../models/adminsModel");
 const guideModel = require ("../models/guidesModel");
 const userModel = require ("../models/usersModel");
+const mwUploadImage = require("../middlewares/uploadImageMw");
 
 const mailRegExp = new RegExp("^[a-zA-Z0-9_!#$%&amp;'*+/=?`{|}~^-]+(?:\\.[a-zA-Z0-9_!#$%&amp;'*+/=?`{|}~^-]+)*@[a-zA-Z0-9-]+(?:\\.[a-zA-Z0-9-]+)*$");
 const passwordRegExp = new RegExp("^(.*[a-zA-Z0-9!@#$%^&*])$");
@@ -61,7 +62,7 @@ const registerCtrl =
     },
     registerGuide (req, res)
     {
-        const {firstName, lastName, mail, password, description, experienceYears, profilePicture} = req.body;
+        const {firstName, lastName, mail, password, description, experienceYears} = req.body;
 
         if (typeof(firstName) !== "string" || typeof(lastName) !== "string" || typeof(mail) !== "string" || typeof(password) !== "string" || typeof(description) !== "string")
         {
@@ -89,6 +90,8 @@ const registerCtrl =
         let guideSlug = firstName + lastName;
         guideSlug = guideSlug.toLowerCase();
 
+        let imgPath = "/uploads/"+req.file.filename;
+
         // Save guide to the guides database
         let newGuide = new guideModel(
         {
@@ -98,7 +101,7 @@ const registerCtrl =
             password: hashedPwd,
             description: description,
             experienceYears: experienceYears,
-            profilePicture: profilePicture,
+            guidePicture: imgPath,
             state: "En attente",
             role: "guide",
             slug: guideSlug
@@ -116,7 +119,8 @@ const registerCtrl =
     },
     registerUser (req, res)
     {
-        const {firstName, lastName, mail, password, profilePicture} = req.body;
+        const {firstName, lastName, mail, password} = req.body;
+
         if (typeof(firstName) !== "string" || typeof(lastName) !== "string" || typeof(mail) !== "string" || typeof(password) !== "string")
         {
             return res.status(422).json({message: "Un ou plusieurs champs ne sont pas du bon type"})
@@ -143,6 +147,8 @@ const registerCtrl =
         let userSlug = firstName + lastName;
         userSlug = userSlug.toLowerCase();
 
+        let imgPath = "/uploads/"+req.file.filename;
+
         // Save guide to the guides database
         let newUser = new userModel(
         {
@@ -150,7 +156,7 @@ const registerCtrl =
             lastName: lastName,
             mail: mail, 
             password: hashedPwd,
-            profilePicture: profilePicture,
+            clientPicture: imgPath,
             role: "user",
             slug: userSlug
         });
