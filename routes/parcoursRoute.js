@@ -15,6 +15,6 @@ router.put("/updatestep", mwToken, mwUploadImage("stepPicture"), mwHasRoles("adm
 router.delete("/deletestep", mwToken, mwHasRoles("admin", "super-admin"), parcoursCtrl.deleteStep);
 
 router.get("/:slug", mwToken, parcoursCtrl.getSingleParcours);
-router.get("/:id", mwToken, parcoursCtrl.getSingleParcoursById);
+router.get("/get/:id", mwToken, parcoursCtrl.getSingleParcoursById);
 
 module.exports = router;

@@ -11,7 +11,7 @@ router.put("/update", mwToken, mwUploadImage("guide"), guideCtrl.updateGuide);
 router.delete("/delete", mwToken, mwHasRoles("admin", "super-admin"), guideCtrl.deleteGuide);
 
 router.get("/:slug", mwToken, guideCtrl.getSingleGuide);
-router.get("/:id", mwToken, guideCtrl.getSingleGuideById);
+router.get("/get/:id", mwToken, guideCtrl.getSingleGuideById);
 router.get("/userinfos", mwToken, loginCtrl.getCurrentUser);
 
 module.exports = router;
