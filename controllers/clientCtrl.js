@@ -39,6 +39,8 @@ const clientsCtrl = {
     }   
     client.mail = body.mail ?? client.mail;
 
+    client.userPicture = "/uploads/"+req.file.filename ?? client.userPicture;
+
     if (body.password)
     {
       const hashedPwd = bcrypt.hashSync(body.password, 10, (err, hash) =>
@@ -50,6 +52,8 @@ const clientsCtrl = {
         body.password = hash;
       })
     }
+
+
     try {
       await client.save();
       return res.status(200).json({ message: "Client modifié" });
