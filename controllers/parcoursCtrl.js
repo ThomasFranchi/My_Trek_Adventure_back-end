@@ -71,9 +71,7 @@ const parcoursCtrl = {
 
   // Update a parcours according to the new informations
   async updateParcours(req, res) {
-    const body = req.body;
-
-    
+    const body = req.body;   
 
     const parcours = await parcoursModel.findOne({slug: body.slug}).exec();
     console.log (parcours);
@@ -124,8 +122,7 @@ const parcoursCtrl = {
     const { slug, stepName, stepLatitude, stepLongitude, stepDescription } = req.body;
 
     // Update the slug pertaining to the new name
-    let stepSlug = stepName.toLowerCase();
-    stepSlug = stepSlug.replaceAll(" ", "-");
+    let stepSlug = stepName.toLowerCase().replaceAll(" ", "-");
 
     let imgPath = "/uploads/"+req.file.filename;
 
@@ -152,12 +149,31 @@ const parcoursCtrl = {
 
     // Update a step in the parcours
   async updateStep(req, res) {
-    const { slug, stepSlug/*, stepName, stepLatitude, stepLongitude, stepPicture, stepDescription */} = req.body;
+    //const { slug, stepSlug/*, stepName, stepLatitude, stepLongitude, stepPicture, stepDescription */} = req.body;
+    
+    const body = req.body; 
 
     // Look if the step exists
-    const parcoursStep = await parcoursModel.findOne ({steps: { $elemMatch: { stepSlug: "etape-7" } } }).exec();
+    const parcoursStep = await parcoursModel.findOne ({steps: { $elemMatch: { stepSlug: body.slug } } }).exec();
     console.log("parcoursStep");
     console.log(parcoursStep);
+
+    if (body.name) {
+      parcoursStep.name = body.name;
+      parcoursStep.slug = body.name.toLowerCase().replaceAll(" ", "-")
+    }
+
+    if (body.stepPicture)
+    {
+      parcoursStep.stepPicture = "/uploads/"+req.file.filename;
+    }
+
+
+    parcours.duration = body.duration ?? parcours.duration;
+    parcours.description = body.description ?? parcours.description;
+    parcours.price = body.price ?? parcours.price;
+    parcours.picture = body.picture ?? parcours.picture;
+    parcours.difficulty = body.difficulty ?? parcours.difficulty;
 
     // Update the step (TO-DO)
 
@@ -198,10 +214,9 @@ const parcoursCtrl = {
   },
   async getSingleParcoursById(req, res)
   {
-    const id = req.params.id;
-    console.log("id");
-    console.log(id);
-    const parcours = await parcoursModel.findOne ({_id: id}).exec();
+    let parcoursID = req.params.id.slice(4);
+    console.log("parcoursID " + parcoursID);
+    const parcours = await parcoursModel.findOne ({_id: parcoursID}).exec();
     if (!parcours)
     {
         return res.status(422).json({message:"L'opération n'a pas pu être effectuée"});

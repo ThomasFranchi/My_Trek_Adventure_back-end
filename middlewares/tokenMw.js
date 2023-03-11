@@ -19,8 +19,6 @@ async function token (req, res, next)
         let currentUser;
         const decodedToken = jwt.verify(token, process.env.SECRET_KEY);
 
-        console.log(decodedToken);
-
         // if token is not valid
         if(!decodedToken) {
             return res.status(401).json({message:"Token invalide"});
@@ -53,9 +51,7 @@ async function token (req, res, next)
                 currentUser = user;
             } 
         }
-        console.log(currentUser);
         req.user = currentUser;
-        console.log(req.user);
         next();
     }
     catch(error)

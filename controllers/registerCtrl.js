@@ -56,7 +56,6 @@ const registerCtrl =
         })
         .catch((err)=>
         {
-            console.log(err);
             return res.status(422).json({message:"Une erreur inattendue est survenue"}); 
         })
     },
@@ -113,7 +112,6 @@ const registerCtrl =
         })
         .catch((err)=>
         {
-            console.log(err);
             return res.status(422).json({message:"Une erreur inattendue est survenue"}); 
         })
     },
@@ -167,7 +165,6 @@ const registerCtrl =
         })
         .catch((err)=>
         {
-            console.log(err);
             return res.status(422).json({message:"Une erreur inattendue est survenue"}); 
         })
     }

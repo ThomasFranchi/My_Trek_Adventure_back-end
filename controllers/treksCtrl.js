@@ -10,7 +10,6 @@ const treksCtrl = {
         .status(500)
         .json({ message: "Une erreur inattendue s'est produite" });
     }
-    console.log(list);
     return res.json(list);
   },
   async createTrek(req, res) {
@@ -53,7 +52,6 @@ const treksCtrl = {
     })
     .catch((err)=>
     {
-        console.log(err); 
         return res
         .status(422)
         .json({message: "Une erreur inattendue est survenue"}); 

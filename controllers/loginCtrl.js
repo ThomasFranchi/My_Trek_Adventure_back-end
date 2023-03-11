@@ -15,8 +15,6 @@ const loginCtrl =
     {
         const {mail, password} = req.body;
 
-        console.log(mail + " " + password);
-
         // Check if evertyhing is good
         if (typeof(mail) !== "string" || typeof(password) !== "string")
         {
@@ -154,7 +152,6 @@ const loginCtrl =
     async getUserRole(req, res)
     {
         const id = req.user;
-        console.log("id " + id);
         const admin = adminModel.findOne( {_id: id});
         const guide = guideModel.findOne( {_id: id});
         const user = userModel.findOne( {_id: id});
@@ -177,8 +174,6 @@ const loginCtrl =
                 req.user = user;
             } 
         }
-        console.log ("req.user");
-        console.log (req.user);
         return res.json(req.user);
     }
 }
