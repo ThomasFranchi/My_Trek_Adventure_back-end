@@ -23,8 +23,7 @@ const treksCtrl = {
     } = req.body;
 
     const parcoursId = await parcoursModel.findOne ({slug: parcours} ).exec();
-    if (!parcoursId)
-    {
+    if (!parcoursId) {
         return res.status(422).json({message:"L'opération n'a pas pu être effectuée"});
     }
 
@@ -44,14 +43,12 @@ const treksCtrl = {
       guideID: guideId._id,
     });
 
-    newTreks.save().then(()=>
-    {
+    newTreks.save().then(()=> {
         return res
         .status(201)
         .json({message: "Trek crée"});
     })
-    .catch((err)=>
-    {
+    .catch((err)=> {
         return res
         .status(422)
         .json({message: "Une erreur inattendue est survenue"}); 

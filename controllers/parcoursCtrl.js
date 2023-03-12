@@ -60,9 +60,8 @@ const parcoursCtrl = {
       .save()
       .then(() => {
         return res.status(201).json({ message: "Parcours crée" });
-      })
+    })
       .catch((err) => {
-        console.log(err);
         return res
           .status(422)
           .json({ message: "Une erreur inattendue est survenue" });
@@ -74,9 +73,7 @@ const parcoursCtrl = {
     const body = req.body;   
 
     const parcours = await parcoursModel.findOne({slug: body.slug}).exec();
-    console.log (parcours);
-    if (!parcours)
-    {
+    if (!parcours) {
         return res.status(422).json({message:"L'opération n'a pas pu être effectuée"});
     }
 
@@ -127,15 +124,15 @@ const parcoursCtrl = {
     let imgPath = "/uploads/"+req.file.filename;
 
     // Update the slug pertaining to the new name
-    const newStep = await parcoursModel.updateOne({slug: slug},
-    {$push: 
-      { steps:{
-        stepName: stepName, 
-        stepLatitude: stepLatitude,
-        stepLongitude: stepLongitude,
-        stepPicture: imgPath,
-        stepDescription: stepDescription,
-        stepSlug: stepSlug
+    const newStep = await parcoursModel.updateOne({slug: slug}, {$
+      push: { 
+        steps:{
+          stepName: stepName, 
+          stepLatitude: stepLatitude,
+          stepLongitude: stepLongitude,
+          stepPicture: imgPath,
+          stepDescription: stepDescription,
+          stepSlug: stepSlug
       }}}, {new: true, upsert:true});
   
       if (!newStep) {
@@ -149,8 +146,6 @@ const parcoursCtrl = {
 
     // Update a step in the parcours
   async updateStep(req, res) {
-    //const { slug, stepSlug/*, stepName, stepLatitude, stepLongitude, stepPicture, stepDescription */} = req.body;
-    
     const body = req.body; 
 
     // Look if the step exists
@@ -163,21 +158,23 @@ const parcoursCtrl = {
       parcoursStep.slug = body.name.toLowerCase().replaceAll(" ", "-")
     }
 
-    if (body.stepPicture)
-    {
+    if (body.stepPicture) {
       parcoursStep.stepPicture = "/uploads/"+req.file.filename;
     }
 
-
-    parcours.duration = body.duration ?? parcours.duration;
-    parcours.description = body.description ?? parcours.description;
-    parcours.price = body.price ?? parcours.price;
-    parcours.picture = body.picture ?? parcours.picture;
-    parcours.difficulty = body.difficulty ?? parcours.difficulty;
+    parcoursStep.stepLatitude = body.stepLatitude ?? parcoursStep.stepLatitude;
+    parcoursStep.stepLongitude = body.stepLongitude ?? parcoursStep.stepLongitude;
+    parcoursStep.stepDescription = body.stepDescription ?? parcoursStep.stepDescription;
 
     // Update the step (TO-DO)
-
-    return res.status(200).json({ message: "Etape mise à jour" });
+    try {
+      await parcoursStep.save();
+      return res.status(200).json({ message: "Etape modifiée" });
+    } catch(e) {
+      return res
+      .status(500)
+      .json({ message: "Une erreur inattendue s'est produite" });
+    }
   },
 
   // Delete a step in the parcours
@@ -186,9 +183,8 @@ const parcoursCtrl = {
 
     // Look if the parcours exists
     const parcours = await parcoursModel.findOne ({slug: slug}).exec();
-    if (!parcours)
-    {
-        return res.status(422).json({message:"L'opération n'a pas pu être effectuée"});
+    if (!parcours){
+      return res.status(422).json({message:"L'opération n'a pas pu être effectuée"});
     }
 
     // Update the parcours by deleting the step
@@ -202,23 +198,18 @@ const parcoursCtrl = {
   },
 
    // Get a single parcours, according to its slug 
-  async getSingleParcours(req, res)
-  {
+  async getSingleParcours(req, res) {
     const slug = req.params.slug;
     const parcours = await parcoursModel.findOne ({slug: slug}).exec();
-    if (!parcours)
-    {
-        return res.status(422).json({message:"L'opération n'a pas pu être effectuée"});
+    if (!parcours) {
+      return res.status(422).json({message:"L'opération n'a pas pu être effectuée"});
     }
     return res.json(parcours);
   },
-  async getSingleParcoursById(req, res)
-  {
+  async getSingleParcoursById(req, res) {
     let parcoursID = req.params.id.slice(4);
-    console.log("parcoursID " + parcoursID);
     const parcours = await parcoursModel.findOne ({_id: parcoursID}).exec();
-    if (!parcours)
-    {
+    if (!parcours) {
         return res.status(422).json({message:"L'opération n'a pas pu être effectuée"});
     }
     return res.json(parcours);
