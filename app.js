@@ -9,6 +9,7 @@ const parcoursRoute = require("./routes/parcoursRoute");
 const treksRoute = require("./routes/treksRoute");
 const guidesRoute = require("./routes/guidesRoute");
 const clientsRoute = require("./routes/clientsRoute");
+const bookingsRoute = require("./routes/bookingsRoute");
 const path = require("path");
 
 require(".//dbConnect/connect");
@@ -26,5 +27,6 @@ app.use("/parcours", parcoursRoute);
 app.use("/treks", treksRoute);
 app.use("/guides",  guidesRoute);
 app.use("/clients", clientsRoute);
+app.use("/bookings", bookingsRoute);
 
 module.exports = app;
