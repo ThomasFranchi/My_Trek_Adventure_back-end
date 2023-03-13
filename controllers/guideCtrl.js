@@ -96,7 +96,6 @@ const guidesCtrl = {
   // Get a single guide with its ObjectID
   async getSingleGuideById(req, res) {
     let guideID = req.params.id.slice(4);
-    console.log("guideID " + guideID);
     const guide = await guidesModel.findOne ({_id: guideID}).exec();
     if (!guide)
     {
