@@ -14,7 +14,7 @@ const guidesCtrl = {
   },
 
   // Update a guide with all the new informations 
-  updateGuide(req, res) {
+  async updateGuide(req, res) {
     const body = req.body; 
     const guide = await guidesModel.findOne({ slug: body.slug }).exec();
     if (!guide) {
