@@ -2,16 +2,19 @@ const express = require('express');
 const router = express.Router();
 const parcoursCtrl = require("../controllers/parcoursCtrl");
 const mwToken = require('../middlewares/tokenMw');
+const mwHasRoles = require("../middlewares/hasRolesMw");
+const mwUploadImage = require("../middlewares/uploadImageMw");
 
-router.get("/", parcoursCtrl.getParcoursList);
-router.post("/add", parcoursCtrl.createParcours);
-router.put("/update", parcoursCtrl.updateParcours);
-router.delete("/delete", parcoursCtrl.deleteParcours);
+router.get("/", mwToken, parcoursCtrl.getParcoursList);
+router.post("/add", mwToken, mwUploadImage("parcoursPicture"), mwHasRoles("admin", "super-admin"), parcoursCtrl.createParcours);
+router.put("/update", mwToken, mwUploadImage("parcoursPicture"), mwHasRoles("admin", "super-admin"), parcoursCtrl.updateParcours);
+router.delete("/delete", mwToken, mwHasRoles("admin", "super-admin"), parcoursCtrl.deleteParcours);
 
-router.put("/addstep", parcoursCtrl.createStep);
-router.put("/updatestep", parcoursCtrl.updateStep);
-router.delete("/deletestep", parcoursCtrl.deleteStep);
+router.put("/addstep", mwToken, mwUploadImage("stepPicture"), mwHasRoles("admin", "super-admin"), parcoursCtrl.createStep);
+router.put("/updatestep", mwToken, mwUploadImage("stepPicture"), mwHasRoles("admin", "super-admin"), parcoursCtrl.updateStep);
+router.delete("/deletestep", mwToken, mwHasRoles("admin", "super-admin"), parcoursCtrl.deleteStep);
 
-router.get("/:slug", parcoursCtrl.getSingleParcours);
+router.get("/:slug", mwToken, parcoursCtrl.getSingleParcours);
+router.get("/get/:id", mwToken, parcoursCtrl.getSingleParcoursById);
 
 module.exports = router;
