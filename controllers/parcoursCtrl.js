@@ -124,8 +124,8 @@ const parcoursCtrl = {
     let imgPath = "/uploads/"+req.file.filename;
 
     // Update the slug pertaining to the new name
-    const newStep = await parcoursModel.updateOne({slug: slug}, {$
-      push: { 
+    const newStep = await parcoursModel.updateOne({slug: slug}, {
+      $push: { 
         steps:{
           stepName: stepName, 
           stepLatitude: stepLatitude,
