@@ -10,6 +10,7 @@ router.get("/", mwToken, clientsCtrl.getClientsList);
 router.put("/update", mwToken, mwUploadImage("clientPicture"), clientsCtrl.updateClient);
 router.delete("/delete", mwToken, mwHasRoles("client", "admin", "super-admin"), clientsCtrl.deleteClient);
 router.get("/:slug", mwToken, clientsCtrl.getSingleClient);
+router.get("/get/:id", mwToken, clientsCtrl.getSingleClientById);
 router.get("/userinfos", mwToken, loginCtrl.getCurrentUser);
 
 module.exports = router;

@@ -33,14 +33,19 @@ const treksCtrl = {
         .status(422)
         .json({ message: "L'opération n'a pas pu être effectuée" });
     }
+    let trekName = "Trek du " + beginDate.slice(0,10);
+    let trekSlug = "trek-" + beginDate.slice(0,10) + endDate.slice(0,10);
 
     let newTreks = new treksModel({
+      trekName: trekName,
       beginDate: beginDate,
       endDate: endDate,
       minPlaces: minPlaces,
       maxPlaces: maxPlaces,
       parcoursID: parcoursId._id,
       guideID: guideId._id,
+      slug: trekSlug,
+      trekState: "En attente"
     });
 
     newTreks.save().then(()=> {
@@ -55,5 +60,14 @@ const treksCtrl = {
     })
   },
   updateTrek(req, res) {},
+  async getSingleTrek(req, res) {
+    const slug = req.params.slug;
+    console.log (slug);
+    const trek = await treksModel.findOne ({slug: slug}).exec();
+    if (!trek) {
+        return res.status(422).json({message:"L'opération n'a pas pu être effectuée"});
+    }
+    return res.json(trek);
+  }
 };
 module.exports = treksCtrl;

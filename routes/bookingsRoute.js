@@ -5,7 +5,7 @@ const mwToken = require('../middlewares/tokenMw');
 const mwHasRoles = require("../middlewares/hasRolesMw");
 
 router.get("/", mwToken, bookingsCtrl.getBookingsList);
-router.put("/add", mwToken, mwHasRoles("client"), bookingsCtrl.addBooking);
+router.put("/add", mwToken, /*mwHasRoles("client"),*/ bookingsCtrl.addBooking);
 router.get("/get/:id", mwToken, bookingsCtrl.getBookingsForUser);
 
 module.exports = router;
