@@ -12,6 +12,25 @@ const treksCtrl = {
     }
     return res.json(list);
   },
+  async getTreksForParcours(req, res) {
+    const slug = req.params.slug;
+    const parcours = await parcoursModel.findOne({slug: slug});
+    if (!parcours)
+    {
+      return res
+        .status(500)
+        .json({ message: "Une erreur inattendue s'est produite" });
+    }
+    console.log(parcours._id)
+
+    const list = await treksModel.find({parcoursID: parcours._id});
+    if (!list) {
+      return res
+        .status(500)
+        .json({ message: "Une erreur inattendue s'est produite" });
+    }
+    return res.json(list);
+  },
   async createTrek(req, res) {
     const {
       beginDate,

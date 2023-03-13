@@ -98,35 +98,9 @@ const loginCtrl =
         const token = jwt.sign( {userId: user._id}, process.env.SECRET_KEY, { expiresIn: "24h" });
         return res.status(200).json({success:true, message: "Connexion réussie", token: token, user: {mail: user.mail, role: user.role}});
     },
-    /*async*/ getCurrentUser(req, res)
+    getCurrentUser(req, res)
     {
-        /*const id = req.user;
-        console.log("id " + id);
-        const admin = adminModel.findOne( {_id: id});
-        const guide = guideModel.findOne( {_id: id});
-        const user = userModel.findOne( {_id: id});
-
-        if (admin || guide || user)
-        {
-            if (admin)
-            {
-                let user = admin;
-                req.user = user;
-            } 
-            if (guide)
-            {
-                let user = guide;
-                req.user = user;
-            } 
-            if (user)
-            {
-                let user = admin;
-                req.user = user;
-            } 
-        }
-        console.log ("req.user");
-        console.log (req.user);
-        return*/ res.json(req.user);
+        res.json(req.user);
     },
     async getUserRole(req, res) {
         const id = req.user;

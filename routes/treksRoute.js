@@ -9,5 +9,5 @@ router.get("/", mwToken, treksCtrl.getTreksList);
 router.post("/add", mwToken, mwHasRoles("admin", "super-admin"), treksCtrl.createTrek);
 router.put("/update", mwToken, mwHasRoles("admin", "super-admin"), treksCtrl.updateTrek);
 router.get("/:slug", mwToken, treksCtrl.getSingleTrek);
-
+router.get("/get/:slug", mwToken, treksCtrl.getTreksForParcours);
 module.exports = router;
