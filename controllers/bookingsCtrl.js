@@ -46,6 +46,15 @@ const bookingsCtrl = {
         return res.status(422).json({message:"L'opération n'a pas pu être effectuée"});
     }
     return res.json(bookings);
-  }
+  },
+  async getMyBookings(req, res) {
+    let userID = req.user._id;
+    const bookings = await treksModel.find ({_id: userID}).exec();
+    if (!bookings)
+    {
+        return res.status(422).json({message:"L'opération n'a pas pu être effectuée"});
+    }
+    return res.json(bookings);
+  },
 };
 module.exports = bookingsCtrl;

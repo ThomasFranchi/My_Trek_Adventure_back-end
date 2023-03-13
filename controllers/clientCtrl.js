@@ -94,9 +94,6 @@ const clientsCtrl = {
         .json({ message: "L'opération n'a pas pu être effectuée" });
     }
     return res.json(client);
-    return res
-        .status(200)
-        .json({ message: "Bon" });
   }
 };
 module.exports = clientsCtrl;
