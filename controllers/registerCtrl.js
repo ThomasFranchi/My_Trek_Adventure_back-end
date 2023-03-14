@@ -70,7 +70,7 @@ const registerCtrl =
         })
 
         let guideSlug = firstName + lastName;
-        guideSlug = guideSlug.toLowerCase();
+        guideSlug = guideSlug.toLowerCase().replaceAll(" ", "-");
 
         let imgPath = "/uploads/"+req.file.filename;
 
@@ -117,7 +117,7 @@ const registerCtrl =
         })
 
         let userSlug = firstName + lastName;
-        userSlug = userSlug.toLowerCase();
+        userSlug = userSlug.toLowerCase().replaceAll(" ", "-");
 
         let imgPath = "/uploads/"+req.file.filename;
 

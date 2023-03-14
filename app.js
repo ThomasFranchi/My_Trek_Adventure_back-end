@@ -19,8 +19,8 @@ app.use(logger('dev'));
 app.use(express.json());
 app.use("/uploads", express.static(path.join(__dirname, "/uploads")));
 
-app.use("/register", registerRoute);
 app.use(mwCORS);
+app.use("/register", registerRoute);
 app.use("/login", loginRoute);
 
 app.use("/parcours", parcoursRoute);
