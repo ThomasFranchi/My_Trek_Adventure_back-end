@@ -84,6 +84,16 @@ const clientsCtrl = {
         .json({ message: "L'opération n'a pas pu être effectuée" });
     }
     return res.status(422).json(client);
+  },
+  async getSingleClientById(req, res) {
+    let clientID = req.params.id.slice(4);
+    const client = await usersModel.findOne({ _id: clientID }).exec();
+    if (!client) {
+      return res
+        .status(422)
+        .json({ message: "L'opération n'a pas pu être effectuée" });
+    }
+    return res.json(client);
   }
 };
 module.exports = clientsCtrl;
