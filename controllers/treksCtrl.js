@@ -87,6 +87,25 @@ const treksCtrl = {
         return res.status(422).json({message:"L'opération n'a pas pu être effectuée"});
     }
     return res.json(trek);
+  },
+  async getTrekListForGuide(req, res) {
+    const slug = req.params.slug;
+    let guideSlug = slug.slice(6);
+    const guideId = await guidesModel.findOne({ slug: guideSlug }).exec();
+    if (!guideId) {
+      return res
+        .status(422)
+        .json({ message: "L'opération n'a pas pu être effectuée" });
+    }
+
+    const trekList = await treksModel.find ({guideID: guideId._id}).exec();
+    if (!trekList) {
+        return res.status(422).json({message:"L'opération n'a pas pu être effectuée"});
+    }
+    return res.json(trekList);
+    /*return res
+        .status(200)
+        .json({ message: "L'opération n'a pas pu être effectuée" });*/
   }
 };
 module.exports = treksCtrl;
