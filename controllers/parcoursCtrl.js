@@ -117,19 +117,19 @@ const parcoursCtrl = {
     //const { slug, stepName, stepLatitude, stepLongitude, stepDescription } = req.body;
     console.log (req.body);
     // Update the slug pertaining to the new name
-    /*let stepSlug = stepName.toLowerCase().replaceAll(" ", "-");
+    let stepSlug = req.body.stepName.toLowerCase().replaceAll(" ", "-");
 
     let imgPath = "/uploads/"+req.file.filename;
 
     // Update the slug pertaining to the new name
-    const newStep = await parcoursModel.updateOne({slug: slug}, {
+    const newStep = await parcoursModel.updateOne({slug: req.body.slug}, {
       $push: { 
         steps:{
-          stepName: stepName, 
-          stepLatitude: stepLatitude,
-          stepLongitude: stepLongitude,
+          stepName: req.body.stepName, 
+          stepLatitude: req.body.stepLatitude,
+          stepLongitude: req.body.stepLongitude,
           stepPicture: imgPath,
-          stepDescription: stepDescription,
+          stepDescription: req.body.stepDescription,
           stepSlug: stepSlug
       }}}, {new: true, upsert:true});
   
@@ -138,7 +138,7 @@ const parcoursCtrl = {
           .status(500)
           .json({ message: "Une erreur inattendue s'est produite" });
       }
-      console.log(newStep);*/
+      console.log(newStep);
       return res.status(200).json({ message: "Etape ajoutée" });
   },
 
