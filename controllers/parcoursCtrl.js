@@ -16,14 +16,13 @@ const parcoursCtrl = {
   
   // Create a parcours in the database
   createParcours(req, res) {
-    const { name, duration, description, price, picture, difficulty } =
+    const { name, duration, description, price, difficulty } =
       req.body;
 
     // Check if evertyhing is good (typeof, unemptiness, regexp validation)
     if (
       typeof name !== "string" ||
-      typeof description !== "string" ||
-      typeof picture !== "string"
+      typeof description !== "string"
     ) {
       return res
         .status(422)
@@ -32,8 +31,7 @@ const parcoursCtrl = {
     if (
       name === "" ||
       duration === "" ||
-      description === "" ||
-      picture === ""
+      description === ""
     ) {
       return res
         .status(422)
@@ -41,7 +39,7 @@ const parcoursCtrl = {
     }
 
     let parcoursSlug = name.toLowerCase();
-    parcoursSlug = parcoursSlug.replace(" ", "-");
+    parcoursSlug = parcoursSlug.replaceAll(" ", "-");
 
     let imgPath = "/uploads/"+req.file.filename;
 

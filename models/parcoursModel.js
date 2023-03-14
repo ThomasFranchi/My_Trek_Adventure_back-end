@@ -12,8 +12,8 @@ const parcoursSchema = new mongoose.Schema(
         steps:[{
             stepName: {type: String, required: true, unique: true},
             stepSlug: String,
-            stepLatitude: {type: String, required: true},
-            stepLongitude: {type: String, required: true},
+            stepLatitude: {type: Number, required: true},
+            stepLongitude: {type: Number, required: true},
             stepPicture: {type: String, required: true},
             stepDescription: {type: String, required: true}
         }]
