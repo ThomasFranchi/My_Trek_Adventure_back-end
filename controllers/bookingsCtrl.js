@@ -16,8 +16,8 @@ const bookingsCtrl = {
 
   // Add a booking to a trek
   async addBooking(req, res) {
-    const {trekID, userID } = req.body;
-
+    const {trekID} = req.body;
+     const {userID} = req.user
     // Find if the parcours exists, and if it exists, add a new booking
     const newBooking = await treksModel.updateOne({_id: trekID}, {
       $push: { 
