@@ -17,9 +17,10 @@ require(".//dbConnect/connect");
 const app = express();
 app.use(logger('dev'));
 app.use(express.json());
+app.use(mwCORS);
+
 app.use("/uploads", express.static(path.join(__dirname, "/uploads")));
 
-app.use(mwCORS);
 app.use("/register", registerRoute);
 app.use("/login", loginRoute);
 
