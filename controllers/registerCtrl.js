@@ -70,7 +70,7 @@ const registerCtrl =
         })
 
         let guideSlug = firstName + lastName;
-        guideSlug = guideSlug.toLowerCase();
+        guideSlug = guideSlug.toLowerCase().replaceAll(" ", "-");
 
         let imgPath = "/uploads/"+req.file.filename;
 
@@ -97,7 +97,7 @@ const registerCtrl =
     },
     registerUser (req, res) {
         const {firstName, lastName, mail, password} = req.body;
-
+console.log("req.body", req.body, req.file)
         if (typeof(firstName) !== "string" || typeof(lastName) !== "string" || typeof(mail) !== "string" || typeof(password) !== "string") {
             return res.status(422).json({message: "Un ou plusieurs champs ne sont pas du bon type"})
         }
@@ -117,7 +117,7 @@ const registerCtrl =
         })
 
         let userSlug = firstName + lastName;
-        userSlug = userSlug.toLowerCase();
+        userSlug = userSlug.toLowerCase().replaceAll(" ", "-");
 
         let imgPath = "/uploads/"+req.file.filename;
 

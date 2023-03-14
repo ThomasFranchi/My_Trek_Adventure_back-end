@@ -22,7 +22,6 @@ app.use(mwCORS);
 app.use("/uploads", express.static(path.join(__dirname, "/uploads")));
 
 app.use("/register", registerRoute);
-
 app.use("/login", loginRoute);
 
 app.use("/parcours", parcoursRoute);

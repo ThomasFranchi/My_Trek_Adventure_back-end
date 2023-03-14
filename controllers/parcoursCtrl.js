@@ -114,10 +114,10 @@ const parcoursCtrl = {
 
   // Create a step in the parcours
   async createStep(req, res) {
-    const { slug, stepName, stepLatitude, stepLongitude, stepDescription } = req.body;
-
+    //const { slug, stepName, stepLatitude, stepLongitude, stepDescription } = req.body;
+    console.log (req.body);
     // Update the slug pertaining to the new name
-    let stepSlug = stepName.toLowerCase().replaceAll(" ", "-");
+    /*let stepSlug = stepName.toLowerCase().replaceAll(" ", "-");
 
     let imgPath = "/uploads/"+req.file.filename;
 
@@ -138,7 +138,7 @@ const parcoursCtrl = {
           .status(500)
           .json({ message: "Une erreur inattendue s'est produite" });
       }
-      console.log(newStep);
+      console.log(newStep);*/
       return res.status(200).json({ message: "Etape ajoutée" });
   },
 
