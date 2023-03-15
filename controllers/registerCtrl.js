@@ -15,13 +15,13 @@ const registerCtrl =
         const {mail, password} = req.body;
 
         // Check if evertyhing is good (typeof, unemptiness, regexp validation)
-        if (typeof(mail) !== "string" || typeof(password) !== "string") {
+        if (typeof mail !== "string" || typeof password !== "string") {
             return res.status(422).json({message: "Un ou plusieurs champs ne sont pas du bon type"});
         }
         if (mail === "" || password === "") {
             return res.status(422).json({message: "Un ou plusieurs champs sont vides"});
         }
-        if (!mailRegExp.test(mail) || !passwordRegExp.test(password)) {
+        if (!mailRegExp.test (mail) || !passwordRegExp.test (password)) {
             return res.status(422).json({message: "Adresse mail ou mot de passe incorrect"});
         }
 
@@ -51,13 +51,13 @@ const registerCtrl =
     registerGuide (req, res) {
         const {firstName, lastName, mail, password, description, experienceYears} = req.body;
 
-        if (typeof(firstName) !== "string" || typeof(lastName) !== "string" || typeof(mail) !== "string" || typeof(password) !== "string" || typeof(description) !== "string") {
+        if (typeof firstName !== "string" || typeof lastName !== "string" || typeof mail !== "string" || typeof password !== "string" || typeof description !== "string") {
             return res.status(422).json({message: "Un ou plusieurs champs ne sont pas du bon type"})
         }
         if (firstName === "" || lastName === "" || mail === "" || password === "" || description === "") {
             return res.status(422).json({message: "Un ou plusieurs champs sont vides"})
         }
-        if (!mailRegExp.test(mail) || !passwordRegExp.test(password)) {
+        if (!mailRegExp.test (mail) || !passwordRegExp.test (password)) {
             return res.status(422).json({message: "Adresse mail ou mot de passe incorrect"});
         }
 
@@ -97,7 +97,6 @@ const registerCtrl =
     },
     registerUser (req, res) {
         const {firstName, lastName, mail, password} = req.body;
-console.log("req.body", req.body, req.file)
         if (typeof(firstName) !== "string" || typeof(lastName) !== "string" || typeof(mail) !== "string" || typeof(password) !== "string") {
             return res.status(422).json({message: "Un ou plusieurs champs ne sont pas du bon type"})
         }

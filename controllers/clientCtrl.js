@@ -39,13 +39,11 @@ const clientsCtrl = {
         client.slug = client.firstName.toLowerCase().replaceAll(" ", "-") + body.lastName.toLowerCase().replaceAll(" ", "-");
       }
     }  
-    if (body.mail)
-    {
+    if (body.mail) {
       client.mail = body.mail;
     } 
 
-    if (req.file)
-    {
+    if (req.file) {
       client.userPicture = "/uploads/"+req.file.filename;
     }   
 
@@ -53,7 +51,7 @@ const clientsCtrl = {
       const hashedPwd = bcrypt.hashSync(body.password, 10, (err, hash) => {
         if (err)
         {
-            return res.status(500).json({message: "Erreur inconnue"});
+          return res.status(500).json({message: "Erreur inconnue"});
         }
         body.password = hash;
       })
@@ -62,9 +60,7 @@ const clientsCtrl = {
       await client.save();
       return res.status(200).json({ message: "Client modifié" });
     } catch(e) {
-      return res
-      .status(500)
-      .json({ message: "Une erreur inattendue s'est produite" });
+      return res.status(500).json({ message: "Une erreur inattendue s'est produite" });
     }
   },
 
@@ -73,30 +69,23 @@ const clientsCtrl = {
     const {slug} = req.body;
     const client = await usersModel.deleteOne({ slug: slug });
     if (!client) {
-      return res
-        .status(500)
-        .json({ message: "Une erreur inattendue s'est produite" });
+      return res.status(500).json({ message: "Une erreur inattendue s'est produite" });
     }
     return res.status(200).json({ status: "200", message: "Client supprimé" });
   },
 
   // Get a single client by its slug
   async getSingleClient(req, res) {
-    const slug = req.params.slug;
-    const client = await usersModel.findOne({ slug: slug }).exec();
+    const client = await usersModel.findOne({ slug: req.params.slug }).exec();
     if (!client) {
-      return res
-        .status(422)
-        .json({ message: "L'opération n'a pas pu être effectuée" });
+      return res.status(422).json({ message: "L'opération n'a pas pu être effectuée" });
     }
-    return res.status(422).json(client);
+    return res.json(client);
   },
   async getSingleClientById(req, res) {
     const client = await usersModel.findOne({ _id: req.params.id }).exec();
     if (!client) {
-      return res
-        .status(422)
-        .json({ message: "L'opération n'a pas pu être effectuée" });
+      return res.status(422).json({ message: "L'opération n'a pas pu être effectuée" });
     }
     return res.json(client);
   }
