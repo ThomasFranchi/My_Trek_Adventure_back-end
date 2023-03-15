@@ -171,7 +171,6 @@ const parcoursCtrl = {
     }
 
     if (req.file) {
-      console.log("stepPicturee");
       parcoursStep.stepPicture = "/uploads/"+req.file.filename;
     }
     if (body.latitude) {
@@ -183,8 +182,7 @@ const parcoursCtrl = {
     if (body.description) {
       parcoursStep.stepDescription = body.description;
     }
-
-    // Update the step (TO-DO)
+    
     try {
       await parcoursStep.save();
       return res.status(200).json({ status: 200, message: "Etape modifiée" });

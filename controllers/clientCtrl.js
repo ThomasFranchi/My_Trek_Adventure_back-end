@@ -38,10 +38,16 @@ const clientsCtrl = {
         client.lastName = body.lastName;
         client.slug = client.firstName.toLowerCase().replaceAll(" ", "-") + body.lastName.toLowerCase().replaceAll(" ", "-");
       }
-    }   
-    client.mail = body.mail ?? client.mail;
+    }  
+    if (body.mail)
+    {
+      client.mail = body.mail;
+    } 
 
-    client.userPicture = "/uploads/"+req.file.filename ?? client.userPicture;
+    if (req.file)
+    {
+      client.userPicture = "/uploads/"+req.file.filename;
+    }   
 
     if (body.password) {
       const hashedPwd = bcrypt.hashSync(body.password, 10, (err, hash) => {
