@@ -41,12 +41,7 @@ const guidesCtrl = {
       guide.guidePicture = "/uploads/"+req.file.filename;
     }
     if (body.password) {
-      const hashedPwd = bcrypt.hashSync(guide.password, 10, (err, hash) => {
-        if (err) {
-          return res.status(500).json({message: "Erreur inconnue"});
-        }
-        body.password = hash;
-      })
+      guide.password = bcrypt.hashSync(body.password, 10);
     }
     if (body.description) {
       guide.description = body.description;

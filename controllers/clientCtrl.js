@@ -15,7 +15,7 @@ const clientsCtrl = {
   },
 
   // Update the user with all the new informations 
-  async updateClient(req, res) {
+  async updateClientAdmin(req, res) {
     const body = req.body; 
     const client = await usersModel.findOne({ slug: body.slug }).exec();
     if (!client) {
@@ -44,11 +44,11 @@ const clientsCtrl = {
     } 
 
     if (req.file) {
-      client.userPicture = "/uploads/"+req.file.filename;
+      client.clientPicture = "/uploads/"+req.file.filename;
     }   
 
     if (body.password) {
-      const hashedPwd = bcrypt.hashSync(body.password, 10, (err, hash) => {
+      const hashedPwd = bcrypt.hash(body.password, 10, (err, hash) => {
         if (err)
         {
           return res.status(500).json({message: "Erreur inconnue"});
@@ -60,6 +60,60 @@ const clientsCtrl = {
       await client.save();
       return res.status(200).json({ message: "Client modifié" });
     } catch(e) {
+      console.log(e)
+      return res.status(500).json({ message: "Une erreur inattendue s'est produite" });
+    }
+  },
+
+  // Update the user with all the new informations 
+  async updateClient(req, res) {
+    const body = req.body; 
+    console.log(body);
+    console.log(req.file);
+    const client = await usersModel.findOne({ slug: body.slug }).exec();
+    if (!client) {
+      return res
+        .status(422)
+        .json({ message: "L'opération n'a pas pu être effectuée" });
+    }
+    if (body.firstName && body.lastName) {
+      client.firstName = body.firstName;
+      client.lastName = body.lastName;
+      client.slug = body.firstName.toLowerCase().replaceAll(" ", "-") + client.lastName.toLowerCase().replaceAll(" ", "-");
+    }
+    else 
+    {
+      if (body.firstName) {
+        client.firstName = body.firstName;
+        client.slug = body.firstName.toLowerCase().replaceAll(" ", "-") + client.lastName.toLowerCase().replaceAll(" ", "-");
+      }
+      if (body.lastName) {
+        client.lastName = body.lastName;
+        client.slug = client.firstName.toLowerCase().replaceAll(" ", "-") + body.lastName.toLowerCase().replaceAll(" ", "-");
+      }
+    }  
+    if (body.mail) {
+      client.mail = body.mail;
+    } 
+
+    if (req.file) {
+      client.clientPicture = "/uploads/"+req.file.filename;
+    }   
+
+    if (body.password) {
+      const hashedPwd = bcrypt.hash(body.password, 10, (err, hash) => {
+        if (err)
+        {
+          return res.status(500).json({message: "Erreur inconnue"});
+        }
+        body.password = hash;
+      })
+    }
+    try {
+      await client.save();
+      return res.status(200).json({ message: "Client modifié" });
+    } catch(e) {
+      console.log(e)
       return res.status(500).json({ message: "Une erreur inattendue s'est produite" });
     }
   },
@@ -69,6 +123,7 @@ const clientsCtrl = {
     const {slug} = req.body;
     const client = await usersModel.deleteOne({ slug: slug });
     if (!client) {
+
       return res.status(500).json({ message: "Une erreur inattendue s'est produite" });
     }
     return res.status(200).json({ status: "200", message: "Client supprimé" });
