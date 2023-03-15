@@ -205,12 +205,12 @@ const parcoursCtrl = {
     return res.json(parcours);
   },
   async getSingleParcoursById(req, res) {
-    let parcoursID = req.params.id.slice(4);
-    const parcours = await parcoursModel.findOne ({_id: parcoursID}).exec();
+    const parcours = await parcoursModel.findOne ({_id: req.params.id}).exec();
     if (!parcours) {
         return res.status(422).json({message:"L'opération n'a pas pu être effectuée"});
     }
     return res.json(parcours);
+
   }
 };
 module.exports = parcoursCtrl;
