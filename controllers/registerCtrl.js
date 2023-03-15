@@ -96,6 +96,7 @@ const registerCtrl =
         })
     },
     registerUser (req, res) {
+        console.log(req.body)
         const {firstName, lastName, mail, password} = req.body;
         if (typeof(firstName) !== "string" || typeof(lastName) !== "string" || typeof(mail) !== "string" || typeof(password) !== "string") {
             return res.status(422).json({message: "Un ou plusieurs champs ne sont pas du bon type"})
@@ -103,8 +104,12 @@ const registerCtrl =
         if (firstName === "" || lastName === "" || mail === "" || password === "") {
             return res.status(422).json({message: "Un ou plusieurs champs sont vides"})
         }
-        if (!mailRegExp.test(mail) || !passwordRegExp.test(password)) {
+        if (!mailRegExp.test(mail) ) {
             return res.status(422).json({message: "Adresse mail ou mot de passe incorrect"});
+        }
+
+        if (!passwordRegExp.test(password)) {
+            return res.status(422).json({message: "Votre mot de passe doit comporter au moins 1 lettre, 1 chiffre et un caractère spécial"});
         }
 
         // Encrypt password to database
@@ -118,7 +123,14 @@ const registerCtrl =
         let userSlug = firstName + lastName;
         userSlug = userSlug.toLowerCase().replaceAll(" ", "-");
 
-        let imgPath = "/uploads/"+req.file.filename;
+
+        let imgPath
+
+        if (req.file) {
+             imgPath = "/uploads/"+req.file.filename;
+        }   else {
+             imgPath = "/uploads/dummy.png";
+        }
 
         // Save guide to the guides database
         let newUser = new userModel({
