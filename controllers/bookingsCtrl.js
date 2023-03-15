@@ -47,7 +47,7 @@ const bookingsCtrl = {
   },
   async getMyBookings(req, res) {
     let userID = req.user._id;
-    const bookings = await treksModel.find ({bookings:{$elemMatch:{userID: userID}}}, "beginDate endDate parcoursID guideID minPlaces maxPlaces trekName trekState").exec();
+    const bookings = await treksModel.find ({bookings:{$elemMatch:{userID: userID}}}, "beginDate endDate parcoursID guideID minPlaces maxPlaces trekName trekState slug").exec();
     if (!bookings)
     {
         return res.status(422).json({message:"L'opération n'a pas pu être effectuée"});
