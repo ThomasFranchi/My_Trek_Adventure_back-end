@@ -7,7 +7,7 @@ const userModel = require ("../models/usersModel");
 const mwUploadImage = require("../middlewares/uploadImageMw");
 
 const mailRegExp = new RegExp("^[a-zA-Z0-9_!#$%&amp;'*+/=?`{|}~^-]+(?:\\.[a-zA-Z0-9_!#$%&amp;'*+/=?`{|}~^-]+)*@[a-zA-Z0-9-]+(?:\\.[a-zA-Z0-9-]+)*$");
-const passwordRegExp = new RegExp("^(.*[a-zA-Z][0-9!][@#$%^&*])");
+const passwordRegExp = new RegExp("(.*[a-zA-Z][0-9!][@#$%^&*])");
 
 const registerCtrl = 
 {
