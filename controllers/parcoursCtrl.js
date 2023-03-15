@@ -7,35 +7,21 @@ const parcoursCtrl = {
     const list = await parcoursModel.find({});
     console.log (list);
     if (!list) {
-      return res
-        .status(500)
-        .json({ message: "Une erreur inattendue s'est produite" });
+      return res.status(500).json({ message: "Une erreur inattendue s'est produite" });
     }
     return res.json(list);
   },
   
   // Create a parcours in the database
   createParcours(req, res) {
-    const { name, duration, description, price, difficulty } =
-      req.body;
+    const { name, duration, description, price, difficulty, country } = req.body;
 
     // Check if evertyhing is good (typeof, unemptiness, regexp validation)
-    if (
-      typeof name !== "string" ||
-      typeof description !== "string"
-    ) {
-      return res
-        .status(422)
-        .json({ message: "Un ou plusieurs champs ne sont pas du bon type" });
+    if (typeof name !== "string" || typeof description !== "string" ||  typeof country !== "string") {
+      return res.status(422).json({ message: "Un ou plusieurs champs ne sont pas du bon type" });
     }
-    if (
-      name === "" ||
-      duration === "" ||
-      description === ""
-    ) {
-      return res
-        .status(422)
-        .json({ message: "Un ou plusieurs champs sont vides" });
+    if ( name === "" || description === ""  || country === "") {
+      return res.status(422).json({ message: "Un ou plusieurs champs sont vides" });
     }
 
     let parcoursSlug = name.toLowerCase();
@@ -52,24 +38,20 @@ const parcoursCtrl = {
       slug: parcoursSlug,
       parcoursPicture: imgPath,
       difficulty: difficulty,
+      country: country
     });
 
-    newParcours
-      .save()
-      .then(() => {
+    newParcours.save().then(() => {
         return res.status(201).json({ message: "Parcours crée" });
     })
       .catch((err) => {
-        return res
-          .status(422)
-          .json({ message: "Une erreur inattendue est survenue" });
+        return res.status(422).json({ message: "Une erreur inattendue est survenue" });
       });
   },
 
   // Update a parcours according to the new informations
   async updateParcours(req, res) {
     const body = req.body;   
-    console.log(body);
 
     const parcours = await parcoursModel.findOne({slug: body.slug}).exec();
     if (!parcours) {
@@ -97,6 +79,9 @@ const parcoursCtrl = {
     if (body.difficulty) {
       parcours.difficulty = body.difficulty;
     }
+    if (body.country) {
+      parcours.country = body.country;
+    }
 
     // Update the parcours
 
@@ -104,9 +89,7 @@ const parcoursCtrl = {
       await parcours.save();
       return res.status(200).json({ status: 200, message: "Parcours modifié" });
     } catch(e) {
-      return res
-      .status(500)
-      .json({ message: "Une erreur inattendue s'est produite" });
+      return res.status(500).json({ message: "Une erreur inattendue s'est produite" });
     }
   },
 
@@ -116,25 +99,20 @@ const parcoursCtrl = {
 
     const parcours = await parcoursModel.deleteOne({ slug: slug });
     if (!parcours) {
-      return res
-        .status(500)
-        .json({ message: "Une erreur inattendue s'est produite" });
+      return res.status(500).json({ message: "Une erreur inattendue s'est produite" });
     }
     return res.status(200).json({ message: "Parcours supprimé" });
   },
 
   // Create a step in the parcours
   async createStep(req, res) {
-    //const { slug, stepName, stepLatitude, stepLongitude, stepDescription } = req.body;
-    console.log (req.body);
     // Update the slug pertaining to the new name
     let stepSlug = req.body.stepName.toLowerCase().replaceAll(" ", "-");
 
     let imgPath = "/uploads/"+req.file.filename;
 
     // Update the slug pertaining to the new name
-    const newStep = await parcoursModel.updateOne({slug: req.body.slug}, {
-      $push: { 
+    const newStep = await parcoursModel.updateOne({slug: req.body.slug}, {$push: { 
         steps:{
           stepName: req.body.stepName, 
           stepLatitude: req.body.stepLatitude,
@@ -145,11 +123,8 @@ const parcoursCtrl = {
       }}}, {new: true, upsert:true});
   
       if (!newStep) {
-        return res
-          .status(500)
-          .json({ message: "Une erreur inattendue s'est produite" });
+        return res.status(500).json({ message: "Une erreur inattendue s'est produite" });
       }
-      console.log(newStep);
       return res.status(200).json({ message: "Etape ajoutée" });
   },
 
@@ -169,9 +144,7 @@ const parcoursCtrl = {
       parcoursStep.name = body.name;
       parcoursStep.slug = body.name.toLowerCase().replaceAll(" ", "-")
     }
-
     if (req.file) {
-      console.log("stepPicturee");
       parcoursStep.stepPicture = "/uploads/"+req.file.filename;
     }
     if (body.latitude) {
@@ -183,16 +156,12 @@ const parcoursCtrl = {
     if (body.description) {
       parcoursStep.stepDescription = body.description;
     }
-
-    // Update the step (TO-DO)
+    
     try {
       await parcoursStep.save();
       return res.status(200).json({ status: 200, message: "Etape modifiée" });
     } catch(e) {
-      console.log(e);
-      return res
-      .status(500)
-      .json({ message: "Une erreur inattendue s'est produite" });
+      return res.status(500).json({ message: "Une erreur inattendue s'est produite" });
     }
   },
 
@@ -202,21 +171,19 @@ const parcoursCtrl = {
 
     // Look if the parcours exists
     const parcours = await parcoursModel.findOne ({slug: slug}).exec();
-    if (!parcours){
+    if (!parcours) {
       return res.status(422).json({message:"L'opération n'a pas pu être effectuée"});
     }
 
     // Update the parcours by deleting the step
     const step = await parcoursModel.updateOne({$pull:{steps:{stepSlug: stepSlug }}});
     if (!step) {
-      return res
-        .status(500)
-        .json({ message: "Une erreur inattendue s'est produite" });
+      return res.status(500).json({ message: "Une erreur inattendue s'est produite" });
     }
     return res.status(200).json({ message: "Etape supprimée" });
   },
 
-   // Get a single parcours, according to its slug 
+  // Get a single parcours, according to its slug 
   async getSingleParcours(req, res) {
     const slug = req.params.slug;
     const parcours = await parcoursModel.findOne ({slug: slug}).exec();
@@ -225,6 +192,8 @@ const parcoursCtrl = {
     }
     return res.json(parcours);
   },
+
+  // Get a single parcours, according to its id 
   async getSingleParcoursById(req, res) {
     const parcours = await parcoursModel.findOne ({_id: req.params.id}).exec();
     if (!parcours) {

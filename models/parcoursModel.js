@@ -8,6 +8,7 @@ const parcoursSchema = new mongoose.Schema(
         price: {type: Number, required: true},
         parcoursPicture: {type: String, required: true},
         difficulty: {type: Number, required: true},
+        country: {type: String, required: true},
         slug: String,
         steps:[{
             stepName: {type: String, required: true, unique: true},

@@ -2,44 +2,35 @@ const treksModel = require("../models/treksModel");
 const parcoursModel = require ("../models/parcoursModel");
 const guidesModel = require ("../models/guidesModel");
 
+const dateFormatting = Intl.DateTimeFormat("fr-FR", {
+  dateStyle: "short"
+});
+
 const treksCtrl = {
+  // Get all dates for all parcours
   async getTreksList(req, res) {
     const list = await treksModel.find({});
     if (!list) {
-      return res
-        .status(500)
-        .json({ message: "Une erreur inattendue s'est produite" });
+      return res.status(500).json({ message: "Une erreur inattendue s'est produite" });
     }
     return res.json(list);
   },
+  // Get a list of dates for a parcours
   async getTreksForParcours(req, res) {
-    const slug = req.params.slug;
-    const parcours = await parcoursModel.findOne({slug: slug});
+    const parcours = await parcoursModel.findOne({slug: req.params.slug});
     if (!parcours)
     {
-      return res
-        .status(500)
-        .json({ message: "Une erreur inattendue s'est produite" });
+      return res.status(500).json({ message: "Une erreur inattendue s'est produite" });
     }
-    console.log(parcours._id)
 
     const list = await treksModel.find({parcoursID: parcours._id});
     if (!list) {
-      return res
-        .status(500)
-        .json({ message: "Une erreur inattendue s'est produite" });
+      return res.status(500).json({ message: "Une erreur inattendue s'est produite" });
     }
     return res.json(list);
   },
   async createTrek(req, res) {
-    const {
-      beginDate,
-      endDate,
-      parcours,
-      guide,
-      minPlaces,
-      maxPlaces,
-    } = req.body;
+    const { beginDate, endDate, parcours, guide, minPlaces, maxPlaces } = req.body;
 
     const parcoursId = await parcoursModel.findOne ({slug: parcours} ).exec();
     if (!parcoursId) {
@@ -48,10 +39,10 @@ const treksCtrl = {
 
     const guideId = await guidesModel.findOne({ slug: guide }).exec();
     if (!guideId) {
-      return res
-        .status(422)
-        .json({ message: "L'opération n'a pas pu être effectuée" });
+      return res.status(422).json({ message: "L'opération n'a pas pu être effectuée" });
     }
+
+    // Create a name
     let trekName = "Trek du " + beginDate.slice(0,10);
     let trekSlug = "trek-" + beginDate.slice(0,10) + endDate.slice(0,10);
 
@@ -64,7 +55,7 @@ const treksCtrl = {
       parcoursID: parcoursId._id,
       guideID: guideId._id,
       slug: trekSlug,
-      trekState: "En attente"
+      trekState: "A venir"
     });
 
     newTreks.save().then(()=> {
@@ -78,20 +69,64 @@ const treksCtrl = {
         .json({message: "Une erreur inattendue est survenue"}); 
     })
   },
-  updateTrek(req, res) {},
+  async updateTrek(req, res) {
+    const body = req.body;   
+    console.log(req.body);
+    const trek = await treksModel.findOne({slug: body.slug}).exec();
+    if (!trek) {
+        return res.status(422).json({message:"L'opération n'a pas pu être effectuée"});
+    }
+
+    // Update the slug pertaining to the new name
+    if (body.user.beginDate !== "" && body.user.endDate !== "") {
+      const dateFormat = body.user.beginDate.slice(8)+"/"+body.user.beginDate.slice(5,7)+"/"+body.user.beginDate.slice(0,4);
+      console.log(dateFormat);
+      let trekName = "Trek du " + dateFormat;
+      let trekSlug = "trek-" + body.user.beginDate.slice(0,10) + body.user.endDate.slice(0,10);
+    }
+    else
+    {
+      console.log(trek.endDate); 
+      if (body.user.beginDate !== "") {
+        const dateFormat = body.user.beginDate.slice(8)+"/"+body.user.beginDate.slice(5,7)+"/"+body.user.beginDate.slice(0,4);
+        console.log(dateFormat);
+        let trekName = "Trek du " + dateFormat;
+        let trekSlug = "trek-" + body.user.beginDate.slice(0,10) + trek.endDate.toString().slice(0,10);
+      }
+      if (body.user.endDate !== "") {
+        let trekSlug = "trek-" + trek.beginDate.toString().slice(0,10) + body.user.endDate.slice(0,10);
+      }
+    }
+    
+    if (body.user.minPlaces !== "") {
+      trek.minPlaces = body.user.minPlaces;
+    }
+    if (body.user.maxPlaces !== "") {
+      trek.maxPlaces = body.user.maxPlaces;
+    }
+    if (body.user.trekState !== "") {
+      trek.trekState = body.user.trekState;
+    }
+
+    // Update the trek
+    try {
+      await trek.save();
+      return res.status(200).json({ status: 200, message: "Trek modifié" });
+    } catch(e) {
+      console.log(e);
+      return res.status(500).json({ message: "Une erreur inattendue s'est produite" });
+    }
+  },
   async getSingleTrek(req, res) {
-    const slug = req.params.slug;
-    console.log (slug);
-    const trek = await treksModel.findOne ({slug: slug}).exec();
+    console.log (req.params.slug);
+    const trek = await treksModel.findOne ({slug: req.params.slug}).exec();
     if (!trek) {
         return res.status(422).json({message:"L'opération n'a pas pu être effectuée"});
     }
     return res.json(trek);
   },
   async getTrekListForGuide(req, res) {
-    const slug = req.params.slug;
-    let guideSlug = slug.slice(6);
-    const guideId = await guidesModel.findOne({ slug: guideSlug }).exec();
+    const guideId = await guidesModel.findOne({ slug: req.params.slug }).exec();
     if (!guideId) {
       return res
         .status(422)
@@ -103,9 +138,6 @@ const treksCtrl = {
         return res.status(422).json({message:"L'opération n'a pas pu être effectuée"});
     }
     return res.json(trekList);
-    /*return res
-        .status(200)
-        .json({ message: "L'opération n'a pas pu être effectuée" });*/
   }
 };
 module.exports = treksCtrl;
