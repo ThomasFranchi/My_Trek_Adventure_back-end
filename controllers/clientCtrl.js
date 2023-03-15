@@ -5,6 +5,7 @@ const clientsCtrl = {
 
   // Get the users list form the database
   async getClientsList(req, res) {
+
     const list = await usersModel.find({});
     if (!list) {
       return res
@@ -17,7 +18,10 @@ const clientsCtrl = {
   // Update the user with all the new informations 
   async updateClient(req, res) {
     const body = req.body; 
-    const client = await usersModel.findOne({ slug: body.slug }).exec();
+    console.log(body)
+    console.log(req.file)
+
+    const client = req.user;
     if (!client) {
       return res
         .status(422)
@@ -44,22 +48,16 @@ const clientsCtrl = {
     } 
 
     if (req.file) {
-      client.userPicture = "/uploads/"+req.file.filename;
+      client.clientPicture = "/uploads/"+req.file.filename;
     }   
-
     if (body.password) {
-      const hashedPwd = bcrypt.hashSync(body.password, 10, (err, hash) => {
-        if (err)
-        {
-          return res.status(500).json({message: "Erreur inconnue"});
-        }
-        body.password = hash;
-      })
+      client.password = bcrypt.hashSync(body.password, 10)
     }
+    console.log(client)
     try {
       await client.save();
       return res.status(200).json({ message: "Client modifié" });
-    } catch(e) {
+    } catch(e) { console.log(e)
       return res.status(500).json({ message: "Une erreur inattendue s'est produite" });
     }
   },
