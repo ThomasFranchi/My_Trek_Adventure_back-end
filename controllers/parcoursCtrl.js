@@ -231,7 +231,6 @@ const parcoursCtrl = {
         return res.status(422).json({message:"L'opération n'a pas pu être effectuée"});
     }
     return res.json(parcours);
-    return res.status(422).json({message:"L'opération n'a pas pu être effectuée"});
   }
 };
 module.exports = parcoursCtrl;
