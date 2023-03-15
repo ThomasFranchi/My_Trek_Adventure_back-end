@@ -25,43 +25,57 @@ const guidesCtrl = {
     if (body.firstName && body.lastName) {
       guide.firstName = body.firstName;
       guide.lastName = body.lastName;
-      guide.slug = body.firstName.toLowerCase().replaceAll(" ", "-") + client.lastName.toLowerCase().replaceAll(" ", "-");
+      guide.slug = body.firstName.toLowerCase().replaceAll(" ", "-") + guide.lastName.toLowerCase().replaceAll(" ", "-");
     }
     else 
     {
       if (body.firstName) {
         guide.firstName = body.firstName;
-        guide.slug = body.firstName.toLowerCase().replaceAll(" ", "-") + client.lastName.toLowerCase().replaceAll(" ", "-");
+        guide.slug = body.firstName.toLowerCase().replaceAll(" ", "-") + guide.lastName.toLowerCase().replaceAll(" ", "-");
       }
       if (body.lastName) {
         guide.lastName = body.lastName;
-        guide.slug = client.firstName.toLowerCase().replaceAll(" ", "-") + body.lastName.toLowerCase().replaceAll(" ", "-");
+        guide.slug = guide.firstName.toLowerCase().replaceAll(" ", "-") + body.lastName.toLowerCase().replaceAll(" ", "-");
       }
     }
-    guide.mail = body.mail ?? client.mail;
-
-    guide.userPicture = "/uploads/"+req.file.filename ?? client.userPicture;
-
+    if (body.mail)
+    {
+      guide.mail = body.mail;
+    }
+    if (req.file)
+    {
+      guide.guidePicture = "/uploads/"+req.file.filename;
+    }
     if (body.password)
     {
       const hashedPwd = bcrypt.hashSync(guide.password, 10, (err, hash) =>
       {
         if (err)
         {
-            return res.status(500).json({message: "Erreur inconnue"});
+          console.log (err);
+          return res.status(500).json({message: "Erreur inconnue"});
         }
         body.password = hash;
       })
     }
-    
-    guide.description = body.description ?? guide.description;
-    guide.experienceYears = body.experienceYears ?? guide.experienceYears;
-    guide.state = body.state ?? guide.state;
+    if (body.description)
+    {
+      guide.description = body.description;
+    }
+    if (body.experienceYears)
+    {
+      guide.experienceYears = body.experienceYears;
+    }
+    if (body.state)
+    {
+      guide.state = body.state;
+    }
 
     try {
       await guide.save();
-      return res.status(200).json({ message: "Guide modifié" });
+      return res.status(200).json({ status: 200, message: "Guide modifié" });
     } catch(e) {
+      console.log (e);
       return res
       .status(500)
       .json({ message: "Une erreur inattendue s'est produite" });
@@ -95,8 +109,7 @@ const guidesCtrl = {
 
   // Get a single guide with its ObjectID
   async getSingleGuideById(req, res) {
-    let guideID = req.params.id.slice(4);
-    const guide = await guidesModel.findOne ({_id: guideID}).exec();
+    const guide = await guidesModel.findOne ({_id: req.params.id}).exec();
     if (!guide)
     {
         return res.status(422).json({message:"L'opération n'a pas pu être effectuée"});
