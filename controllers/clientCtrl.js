@@ -86,8 +86,7 @@ const clientsCtrl = {
     return res.status(422).json(client);
   },
   async getSingleClientById(req, res) {
-    let clientID = req.params.id.slice(4);
-    const client = await usersModel.findOne({ _id: clientID }).exec();
+    const client = await usersModel.findOne({ _id: req.params.id }).exec();
     if (!client) {
       return res
         .status(422)
