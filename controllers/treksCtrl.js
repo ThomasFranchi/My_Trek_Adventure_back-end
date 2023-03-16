@@ -43,7 +43,8 @@ const treksCtrl = {
     }
 
     // Create a name
-    let trekName = "Trek du " + beginDate.slice(0,10);
+    const dateFormat = body.user.beginDate.slice(8)+"/"+body.user.beginDate.slice(5,7)+"/"+body.user.beginDate.slice(0,4);
+    let trekName = "Trek du " + dateFormat;
     let trekSlug = "trek-" + beginDate.slice(0,10) + endDate.slice(0,10);
 
     let newTreks = new treksModel({
@@ -80,16 +81,13 @@ const treksCtrl = {
     // Update the slug pertaining to the new name
     if (body.user.beginDate !== "" && body.user.endDate !== "") {
       const dateFormat = body.user.beginDate.slice(8)+"/"+body.user.beginDate.slice(5,7)+"/"+body.user.beginDate.slice(0,4);
-      console.log(dateFormat);
       let trekName = "Trek du " + dateFormat;
       let trekSlug = "trek-" + body.user.beginDate.slice(0,10) + body.user.endDate.slice(0,10);
     }
     else
     {
-      console.log(trek.endDate); 
       if (body.user.beginDate !== "") {
         const dateFormat = body.user.beginDate.slice(8)+"/"+body.user.beginDate.slice(5,7)+"/"+body.user.beginDate.slice(0,4);
-        console.log(dateFormat);
         let trekName = "Trek du " + dateFormat;
         let trekSlug = "trek-" + body.user.beginDate.slice(0,10) + trek.endDate.toString().slice(0,10);
       }

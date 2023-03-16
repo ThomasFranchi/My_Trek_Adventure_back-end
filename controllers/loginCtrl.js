@@ -7,7 +7,7 @@ const guideModel = require ("../models/guidesModel");
 const userModel = require ("../models/usersModel");
 
 const mailRegExp = new RegExp("^[a-zA-Z0-9_!#$%&amp;'*+/=?`{|}~^-]+(?:\\.[a-zA-Z0-9_!#$%&amp;'*+/=?`{|}~^-]+)*@[a-zA-Z0-9-]+(?:\\.[a-zA-Z0-9-]+)*$");
-const passwordRegExp = new RegExp("^(.*[a-zA-Z0-9!@#$%^&*])$");
+const passwordRegExp = new RegExp("^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{4,}$");
 
 const loginCtrl = 
 {
@@ -21,8 +21,12 @@ const loginCtrl =
         if (mail === "" || password === "") {
             return res.status(422).json({message: "Un ou plusieurs champs sont vides"});
         }
-        if (!mailRegExp.test(mail) || !passwordRegExp.test(password)) {
-            return res.status(422).json({message: "L'adresse mail ou le mot de passe est incorrect"});
+        if (!mailRegExp.test(mail) ) {
+            return res.status(422).json({message: "Adresse mail ou mot de passe incorrect"});
+        }
+
+        if (!passwordRegExp.test(password)) {
+            return res.status(422).json({message: "Votre mot de passe doit comporter au moins 1 lettre majuscule, 1 lettre minuscule, 1 chiffre et un caractère spécial"});
         }
 
         const admin = await adminModel.findOne( {mail: mail}, "password mail role").exec();
@@ -50,8 +54,12 @@ const loginCtrl =
         if (mail === "" || password === "") {
             return res.status(422).json({message: "Un ou plusieurs champs sont vides"});
         }
-        if (!mailRegExp.test(mail) || !passwordRegExp.test(password)) {
-            return res.status(422).json({message: "L'adresse mail ou le mot de passe est incorrect"});
+        if (!mailRegExp.test(mail) ) {
+            return res.status(422).json({message: "Adresse mail ou mot de passe incorrect"});
+        }
+
+        if (!passwordRegExp.test(password)) {
+            return res.status(422).json({message: "Votre mot de passe doit comporter au moins 1 lettre majuscule, 1 lettre minuscule, 1 chiffre et un caractère spécial"});
         }
 
         const guide = await guideModel.findOne( {mail: mail}, "password mail role").exec();
@@ -79,9 +87,13 @@ const loginCtrl =
         if (mail === "" || password === "") {
             return res.status(422).json({message: "Un ou plusieurs champs sont vides"});
         }
-        if (!mailRegExp.test(mail) || !passwordRegExp.test(password)) {
-            return res.status(422).json({message: "L'adresse mail ou le mot de passe est incorrect"});
+        if (!mailRegExp.test(mail) ) {
+            return res.status(422).json({message: "Adresse mail ou mot de passe incorrect"});
         }
+
+        /*if (!passwordRegExp.test(password)) {
+            return res.status(422).json({message: "Votre mot de passe doit comporter au moins 1 lettre majuscule, 1 lettre minuscule, 1 chiffre et un caractère spécial"});
+        }*/
         
         const user = await userModel.findOne( {mail: mail}, "password mail role").exec();
         if (!user) {
