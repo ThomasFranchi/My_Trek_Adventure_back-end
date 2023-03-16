@@ -117,10 +117,8 @@ const registerCtrl =
         if (!mailRegExp.test(mail) ) {
             return res.status(422).json({message: "Adresse mail ou mot de passe incorrect"});
         }
-
         if (!passwordRegExp.test(password)) {
-            console.log(passwordRegExp.test(password));
-            return res.status(422).json({message: "Votre mot de passe doit comporter au moins 4 caractères avec 1 lettre, 1 chiffre et 1 caractère spécial"});
+             return res.status(422).json({message: "Votre mot de passe doit comporter au moins 4 caractères avec 1 lettre, 1 chiffre et 1 caractère spécial"});
         }
 
         // Encrypt password to database
