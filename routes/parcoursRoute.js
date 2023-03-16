@@ -18,5 +18,7 @@ router.get("/:slug", mwToken, parcoursCtrl.getSingleParcours);
 router.get("/get/:id", mwToken, parcoursCtrl.getSingleParcoursById);
 
 router.get("/filter/:name", mwToken, parcoursCtrl.filterParcoursByName);
+router.get("/duo/:difficulty/:price", mwToken, parcoursCtrl.duoFilter);
+
 
 module.exports = router;
