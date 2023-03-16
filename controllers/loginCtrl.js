@@ -26,7 +26,7 @@ const loginCtrl =
         }
 
         if (!passwordRegExp.test(password)) {
-            return res.status(422).json({message: "Votre mot de passe doit comporter au moins 1 lettre majuscule, 1 lettre minuscule, 1 chiffre et un caractère spécial"});
+            return res.status(422).json({message: "Votre mot de passe doit comporter au moins 4 caractères avec 1 lettre, 1 chiffre et 1 caractère spécial"});
         }
 
         const admin = await adminModel.findOne( {mail: mail}, "password mail role").exec();
@@ -59,7 +59,7 @@ const loginCtrl =
         }
 
         if (!passwordRegExp.test(password)) {
-            return res.status(422).json({message: "Votre mot de passe doit comporter au moins 1 lettre majuscule, 1 lettre minuscule, 1 chiffre et un caractère spécial"});
+            return res.status(422).json({message: "Votre mot de passe doit comporter au moins 4 caractères avec 1 lettre, 1 chiffre et 1 caractère spécial"});
         }
 
         const guide = await guideModel.findOne( {mail: mail}, "password mail role").exec();
@@ -91,9 +91,9 @@ const loginCtrl =
             return res.status(422).json({message: "Adresse mail ou mot de passe incorrect"});
         }
 
-        /*if (!passwordRegExp.test(password)) {
-            return res.status(422).json({message: "Votre mot de passe doit comporter au moins 1 lettre majuscule, 1 lettre minuscule, 1 chiffre et un caractère spécial"});
-        }*/
+        if (!passwordRegExp.test(password)) {
+            return res.status(422).json({message: "Votre mot de passe doit comporter au moins 4 caractères avec 1 lettre, 1 chiffre et 1 caractère spécial"});
+        }
         
         const user = await userModel.findOne( {mail: mail}, "password mail role").exec();
         if (!user) {
