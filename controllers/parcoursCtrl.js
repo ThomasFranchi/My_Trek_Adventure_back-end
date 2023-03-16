@@ -203,11 +203,45 @@ const parcoursCtrl = {
   },
   // Get a single parcours, according to its id 
   async filterParcoursByName(req, res) {
+    console.log("filterParcoursByName");
     const parcours = await parcoursModel.find ({name: { '$regex' : req.params.name, '$options' : 'i' } }).exec();
     if (!parcours) {
       return res.status(422).json({message:"L'opération n'a pas pu être effectuée"});
     }
     return res.json(parcours);
+  },
+  async duoFilter(req, res) {
+    console.log(req.params);
+    console.log(req.params.price);
+    console.log(req.params.difficulty);
+    let parcours;
+    // Si prix > 0 et difficulté > 0
+    if (req.params.price > 0 && req.params.difficulty > 0)
+    {
+      console.log("Option 1");
+      parcours = await parcoursModel.find ({difficulty: {$eq: req.params.difficulty}, price:{$lt: req.params.price}} ).exec();
+    }
+    else{
+    // Si prix > 0 et difficulté = 0
+    if (req.params.price > 0)
+    {
+      console.log("Option 2");
+      parcours = await parcoursModel.find ({price:{$lte: req.params.price}} ).exec();
+    }
+    // Si prix = 0 et difficulté > 0
+    if (req.params.difficulty > 0)
+    {
+      console.log("Option 3");
+      parcours = await parcoursModel.find ({difficulty: {$eq: req.params.difficulty}} ).exec();
+    }
+  }
+
+    /*const parcours = await parcoursModel.find ({difficulty: {$eq: req.params.difficulty}, price:{$lt: req.params.price}} ).exec();*/
+    if (!parcours) {
+      return res.status(422).json({message:"L'opération n'a pas pu être effectuée"});
+    }
+    return res.json(parcours);
+    return res.status(200).json({message:"Retour"});
   }
 };
 module.exports = parcoursCtrl;
