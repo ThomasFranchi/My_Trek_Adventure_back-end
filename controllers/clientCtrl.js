@@ -69,6 +69,8 @@ const clientsCtrl = {
   // Update the user with all the new informations 
   async updateClient(req, res) {
     const client = req.user;
+    const body = req.body;
+    console.log(client)
     if (!client) {
       return res
         .status(422)

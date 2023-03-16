@@ -7,7 +7,7 @@ const userModel = require ("../models/usersModel");
 const mwUploadImage = require("../middlewares/uploadImageMw");
 
 const mailRegExp = new RegExp("^[a-zA-Z0-9_!#$%&amp;'*+/=?`{|}~^-]+(?:\\.[a-zA-Z0-9_!#$%&amp;'*+/=?`{|}~^-]+)*@[a-zA-Z0-9-]+(?:\\.[a-zA-Z0-9-]+)*$");
-const passwordRegExp = new RegExp("(.*[a-zA-Z][0-9!][@#$%^&*])");
+const passwordRegExp = new RegExp("^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{4,}$");
 
 const registerCtrl = 
 {
@@ -109,7 +109,7 @@ const registerCtrl =
         }
 
         if (!passwordRegExp.test(password)) {
-            return res.status(422).json({message: "Votre mot de passe doit comporter au moins 1 lettre, 1 chiffre et un caractère spécial"});
+            return res.status(422).json({message: "Votre mot de passe doit comporter au moins 4 caractèrers avec  lettre,  chiffre et caractère spécial"});
         }
 
         // Encrypt password to database

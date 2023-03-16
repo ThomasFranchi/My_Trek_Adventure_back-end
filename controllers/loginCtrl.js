@@ -7,7 +7,7 @@ const guideModel = require ("../models/guidesModel");
 const userModel = require ("../models/usersModel");
 
 const mailRegExp = new RegExp("^[a-zA-Z0-9_!#$%&amp;'*+/=?`{|}~^-]+(?:\\.[a-zA-Z0-9_!#$%&amp;'*+/=?`{|}~^-]+)*@[a-zA-Z0-9-]+(?:\\.[a-zA-Z0-9-]+)*$");
-const passwordRegExp = new RegExp("^(.*[a-zA-Z0-9!@#$%^&*])$");
+const passwordRegExp = new RegExp("^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{4,}$");
 
 const loginCtrl = 
 {
@@ -94,6 +94,9 @@ const loginCtrl =
             return res.status(422).json({message: "L'adresse mail ou le mot de passe est incorrect"}) 
         }
 
+
+
+        
         // Generate json web token
         const token = jwt.sign( {userId: user._id}, process.env.SECRET_KEY, { expiresIn: "24h" });
         return res.status(200).json({success:true, message: "Connexion réussie", token: token, user: {mail: user.mail, role: user.role}});
