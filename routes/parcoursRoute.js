@@ -17,4 +17,6 @@ router.delete("/deletestep", mwToken, mwHasRoles("admin", "super-admin"), parcou
 router.get("/:slug", mwToken, parcoursCtrl.getSingleParcours);
 router.get("/get/:id", mwToken, parcoursCtrl.getSingleParcoursById);
 
+router.get("/filter/:name", mwToken, parcoursCtrl.filterParcoursByName);
+
 module.exports = router;

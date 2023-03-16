@@ -200,6 +200,14 @@ const parcoursCtrl = {
         return res.status(422).json({message:"L'opération n'a pas pu être effectuée"});
     }
     return res.json(parcours);
+  },
+  // Get a single parcours, according to its id 
+  async filterParcoursByName(req, res) {
+    const parcours = await parcoursModel.find ({name: { '$regex' : req.params.name, '$options' : 'i' } }).exec();
+    if (!parcours) {
+      return res.status(422).json({message:"L'opération n'a pas pu être effectuée"});
+    }
+    return res.json(parcours);
   }
 };
 module.exports = parcoursCtrl;

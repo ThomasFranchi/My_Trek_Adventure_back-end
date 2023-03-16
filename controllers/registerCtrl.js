@@ -7,7 +7,7 @@ const userModel = require ("../models/usersModel");
 const mwUploadImage = require("../middlewares/uploadImageMw");
 
 const mailRegExp = new RegExp("^[a-zA-Z0-9_!#$%&amp;'*+/=?`{|}~^-]+(?:\\.[a-zA-Z0-9_!#$%&amp;'*+/=?`{|}~^-]+)*@[a-zA-Z0-9-]+(?:\\.[a-zA-Z0-9-]+)*$");
-const passwordRegExp = new RegExp("^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{4,}$");
+const passwordRegExp = new RegExp("^(.*[a-zA-Z0-9!@#$%^&*]){1,16}$");
 
 const registerCtrl = 
 {
@@ -26,6 +26,7 @@ const registerCtrl =
         }
 
         if (!passwordRegExp.test(password)) {
+            console.log(passwordRegExp.test(password));
             return res.status(422).json({message: "Votre mot de passe doit comporter au moins 4 caractères avec 1 lettre, 1 chiffre et 1 caractère spécial"});
         }
 
@@ -49,6 +50,7 @@ const registerCtrl =
             return res.status(201).json({message: "Compte crée"});
         })
         .catch((err)=> {
+            console.log(err);
             return res.status(422).json({message:"Une erreur inattendue est survenue"}); 
         })
     },
@@ -117,6 +119,7 @@ const registerCtrl =
         }
 
         if (!passwordRegExp.test(password)) {
+            console.log(passwordRegExp.test(password));
             return res.status(422).json({message: "Votre mot de passe doit comporter au moins 4 caractères avec 1 lettre, 1 chiffre et 1 caractère spécial"});
         }
 
