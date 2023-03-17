@@ -106,9 +106,9 @@ const registerCtrl =
         })
     },
     registerUser (req, res) {
-        console.log(req.body)
         const {firstName, lastName, mail, password} = req.body;
-        if (typeof(firstName) !== "string" || typeof(lastName) !== "string" || typeof(mail) !== "string" || typeof(password) !== "string") {
+        if (typeof(firstName) !== "string" || typeof(lastName) !== "string" ||
+         typeof(mail) !== "string" || typeof(password) !== "string") {
             return res.status(422).json({message: "Un ou plusieurs champs ne sont pas du bon type"})
         }
         if (firstName === "" || lastName === "" || mail === "" || password === "") {
@@ -132,9 +132,7 @@ const registerCtrl =
         let userSlug = firstName + lastName;
         userSlug = userSlug.toLowerCase().replaceAll(" ", "-");
 
-
-        let imgPath
-
+        let imgPath;
         if (req.file) {
              imgPath = "/uploads/"+req.file.filename;
         }   else {

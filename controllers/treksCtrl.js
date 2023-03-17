@@ -135,6 +135,7 @@ const treksCtrl = {
     if (!trekList) {
         return res.status(422).json({message:"L'opération n'a pas pu être effectuée"});
     }
+    console.log(trekList);
     return res.json(trekList);
   }
 };
