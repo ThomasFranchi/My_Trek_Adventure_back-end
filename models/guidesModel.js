@@ -8,8 +8,10 @@ const guidesSchema = new mongoose.Schema(
         password: {type: String, required: true, select: false},
         description: {type: String, required: true},
         experienceYears: {type: Number, required: true},
-        profilePicture: {type: String, required: true},
-        role: {type:String, required: true}
+        guidePicture: {type: String, required: true},
+        state: {type: String, required: true},
+        role: {type:String, required: true},
+        slug: String
     }
 )
 

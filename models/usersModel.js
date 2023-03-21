@@ -6,8 +6,9 @@ const usersSchema = new mongoose.Schema(
         lastName: {type: String, required: true},
         mail: {type: String, unique: true, required: true}, 
         password: {type: String, required: true, select: false},
-        profilePicture: {type: String, required: true},
-        role: {type: String, required: true}
+        clientPicture: {type: String, required: true},
+        role: {type: String, required: true},
+        slug: String
     }
 )
 
