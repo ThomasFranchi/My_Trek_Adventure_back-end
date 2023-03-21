@@ -4,7 +4,7 @@ const app = require("./app");
 const httpServer = http.createServer(app);
 
 // Set port and start server listening
-const port = 3001;
+const port = process.env.PORT_BACK;
 httpServer.listen(port);
 
 //display in console the listened Port and the url of the / page.
